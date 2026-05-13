@@ -701,6 +701,9 @@ export default function GamesClient({ userName }: GamesClientProps) {
               <Link href="/" className="rounded-lg border border-slate-700 px-4 py-2 hover:bg-slate-800">
                 Volver al Home
               </Link>
+              <Link href="/profile" className="rounded-lg border border-slate-700 px-4 py-2 hover:bg-slate-800">
+                Mi perfil
+              </Link>
               <button
                 onClick={onLogout}
                 className="rounded-lg bg-rose-600 px-4 py-2 font-semibold hover:bg-rose-700"

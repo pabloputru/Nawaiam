@@ -1,0 +1,188 @@
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+
+import { authOptions } from '@/auth';
+import { prisma } from '@/lib/prisma';
+
+type SummaryByGame = {
+  gameId: string;
+  gameTitle: string;
+  attempts: number;
+  avgScore: number;
+  bestScore: number;
+  avgPercent: number;
+  latestAt: Date;
+  latestLabel: string;
+};
+
+export default async function ProfilePage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    redirect('/login');
+  }
+
+  const userEmail = session.user.email;
+  const userName = session.user.name || userEmail.split('@')[0] || 'usuario';
+
+  const results = await prisma.gameResult.findMany({
+    where: { email: userEmail },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const attempts = results.length;
+  const totalScore = results.reduce((acc, result) => acc + result.score, 0);
+  const totalPossible = results.reduce((acc, result) => acc + result.total, 0);
+  const globalPercent = totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0;
+
+  const bestPercent = results.reduce((acc, result) => {
+    const percent = result.total > 0 ? Math.round((result.score / result.total) * 100) : 0;
+    return Math.max(acc, percent);
+  }, 0);
+
+  const latest = results[0] || null;
+
+  const byGameMap = new Map<string, SummaryByGame>();
+
+  for (const result of results) {
+    const current = byGameMap.get(result.gameId);
+    const percent = result.total > 0 ? (result.score / result.total) * 100 : 0;
+
+    if (!current) {
+      byGameMap.set(result.gameId, {
+        gameId: result.gameId,
+        gameTitle: result.gameTitle,
+        attempts: 1,
+        avgScore: result.score,
+        bestScore: result.score,
+        avgPercent: percent,
+        latestAt: result.createdAt,
+        latestLabel: result.label,
+      });
+      continue;
+    }
+
+    const nextAttempts = current.attempts + 1;
+
+    byGameMap.set(result.gameId, {
+      gameId: result.gameId,
+      gameTitle: current.gameTitle,
+      attempts: nextAttempts,
+      avgScore: (current.avgScore * current.attempts + result.score) / nextAttempts,
+      bestScore: Math.max(current.bestScore, result.score),
+      avgPercent: (current.avgPercent * current.attempts + percent) / nextAttempts,
+      latestAt: current.latestAt,
+      latestLabel: current.latestLabel,
+    });
+  }
+
+  const summaryByGame = Array.from(byGameMap.values()).sort((a, b) => b.latestAt.getTime() - a.latestAt.getTime());
+
+  return (
+    <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-sm uppercase tracking-widest text-sky-300">Perfil del candidato</p>
+              <h1 className="text-3xl font-bold">{userName}</h1>
+              <p className="mt-2 text-slate-300">Resumen personal de evaluaciones y resultados acumulados.</p>
+            </div>
+            <div className="flex gap-3">
+              <Link href="/games" className="rounded-lg border border-slate-700 px-4 py-2 hover:bg-slate-800">
+                Ir a evaluaciones
+              </Link>
+              <Link href="/" className="rounded-lg border border-slate-700 px-4 py-2 hover:bg-slate-800">
+                Volver al Home
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <article className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+            <p className="text-xs uppercase tracking-widest text-slate-400">Tests realizados</p>
+            <p className="mt-2 text-3xl font-bold">{attempts}</p>
+          </article>
+          <article className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+            <p className="text-xs uppercase tracking-widest text-slate-400">Promedio global</p>
+            <p className="mt-2 text-3xl font-bold">{globalPercent}%</p>
+          </article>
+          <article className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+            <p className="text-xs uppercase tracking-widest text-slate-400">Mejor porcentaje</p>
+            <p className="mt-2 text-3xl font-bold">{bestPercent}%</p>
+          </article>
+          <article className="rounded-xl border border-slate-800 bg-slate-900 p-4">
+            <p className="text-xs uppercase tracking-widest text-slate-400">Ultimo resultado</p>
+            <p className="mt-2 text-lg font-semibold text-sky-300">{latest ? latest.label : 'Sin datos'}</p>
+            <p className="mt-1 text-xs text-slate-400">
+              {latest ? new Date(latest.createdAt).toLocaleString('es-AR') : 'Todavia no hay evaluaciones'}
+            </p>
+          </article>
+        </section>
+
+        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+          <h2 className="text-xl font-semibold">Desglose por evaluacion</h2>
+          <p className="mt-1 text-sm text-slate-400">Resumen del rendimiento por cada tipo de test.</p>
+
+          {summaryByGame.length === 0 ? (
+            <p className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4 text-sm text-slate-300">
+              Todavia no hay resultados para mostrar. Completa una evaluacion para ver tu perfil.
+            </p>
+          ) : (
+            <div className="mt-4 overflow-x-auto">
+              <table className="min-w-full text-left text-sm">
+                <thead className="text-slate-400">
+                  <tr className="border-b border-slate-700">
+                    <th className="px-3 py-2 font-medium">Evaluacion</th>
+                    <th className="px-3 py-2 font-medium">Intentos</th>
+                    <th className="px-3 py-2 font-medium">Promedio score</th>
+                    <th className="px-3 py-2 font-medium">Promedio %</th>
+                    <th className="px-3 py-2 font-medium">Mejor score</th>
+                    <th className="px-3 py-2 font-medium">Ultimo label</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {summaryByGame.map((item) => (
+                    <tr key={item.gameId} className="border-b border-slate-800 text-slate-200">
+                      <td className="px-3 py-3 font-semibold">{item.gameTitle}</td>
+                      <td className="px-3 py-3">{item.attempts}</td>
+                      <td className="px-3 py-3">{item.avgScore.toFixed(1)}</td>
+                      <td className="px-3 py-3">{Math.round(item.avgPercent)}%</td>
+                      <td className="px-3 py-3">{item.bestScore}</td>
+                      <td className="px-3 py-3">{item.latestLabel}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
+        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+          <h2 className="text-xl font-semibold">Ultimos resultados</h2>
+          <p className="mt-1 text-sm text-slate-400">Historial reciente ordenado por fecha.</p>
+
+          {results.length === 0 ? (
+            <p className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4 text-sm text-slate-300">
+              Sin resultados recientes.
+            </p>
+          ) : (
+            <ul className="mt-4 grid gap-3 md:grid-cols-2">
+              {results.slice(0, 12).map((result) => (
+                <li key={result.id} className="rounded-lg border border-slate-700 bg-slate-800 p-4">
+                  <p className="font-semibold">{result.gameTitle}</p>
+                  <p className="text-slate-300">
+                    {result.score}/{result.total} - {result.label}
+                  </p>
+                  <p className="text-xs text-slate-400">{new Date(result.createdAt).toLocaleString('es-AR')}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+    </main>
+  );
+}
