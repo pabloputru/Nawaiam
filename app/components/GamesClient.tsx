@@ -361,6 +361,8 @@ type MissionEnding = {
   summary: string;
   recommendation: string;
   profile: DecisionProfile;
+  executiveProfile: string;
+  executiveFit: string;
 };
 
 const CHAPTERS = ['Fase I: Alerta Temprana', 'Fase II: Ruptura del Iceberg', 'Fase III: Coordinacion de Evacuacion'];
@@ -403,6 +405,8 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
         title: 'Resultado: Liderazgo de Respuesta de Alto Impacto',
         summary: 'Tomaste iniciativa con criterio y convertiste presion en ejecucion efectiva.',
         recommendation: 'Perfil recomendado para liderar operaciones de cambio acelerado.',
+        executiveProfile: 'Ejecutor Adaptativo',
+        executiveFit: 'Ideal para liderar implementaciones, transformacion y contextos de cambio rapido.',
       };
     }
 
@@ -411,6 +415,8 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
       title: 'Resultado: Impulso de Respuesta Rapida',
       summary: 'Movilizaste la operacion con iniciativa, aunque con margen para mejorar consistencia.',
       recommendation: 'Potenciar chequeos de calidad en decisiones de alta velocidad.',
+      executiveProfile: 'Ejecutor Adaptativo',
+      executiveFit: 'Recomendado para roles con foco en accion y cumplimiento con alta dinamica.',
     };
   }
 
@@ -421,6 +427,8 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
         title: 'Resultado: Estratega de Crisis Sistemica',
         summary: 'Priorizaste evidencia y coordinacion, sosteniendo estabilidad en un entorno extremo.',
         recommendation: 'Perfil ideal para disenar protocolos y conducir decisiones complejas.',
+        executiveProfile: 'Resolutor Analitico',
+        executiveFit: 'Fuerte ajuste para operaciones, estrategia y mejora continua basada en datos.',
       };
     }
 
@@ -429,6 +437,8 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
       title: 'Resultado: Coordinador de Contingencias',
       summary: 'Tomaste decisiones cuidadosas y redujiste incertidumbre en momentos clave.',
       recommendation: 'Ganar mas ritmo operativo sin perder la calidad analitica.',
+      executiveProfile: 'Resolutor Analitico',
+      executiveFit: 'Buen encaje para roles de coordinacion y gestion de riesgos.',
     };
   }
 
@@ -438,6 +448,8 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
       title: 'Resultado: Respuesta Instintiva Efectiva',
       summary: 'Actuaste bajo tension con reflejos utiles y capacidad de recuperacion.',
       recommendation: 'Con estructura de planificacion, este perfil puede escalar fuerte.',
+      executiveProfile: 'Lider Colaborativo',
+      executiveFit: 'Aporta bien en roles de coordinacion transversal con fuerte relacion interpersonal.',
     };
   }
 
@@ -446,6 +458,43 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
     title: 'Resultado: Zona de Riesgo Operativo',
     summary: 'Las decisiones tendieron a reaccion tardia y aumentaron la exposicion del operativo.',
     recommendation: 'Trabajar anticipacion, comunicacion y priorizacion bajo presion.',
+    executiveProfile: 'Coordinador Estrategico',
+    executiveFit: 'Con plan de desarrollo puede evolucionar a roles de gestion y liderazgo de equipos.',
+  };
+}
+
+function executiveProfileByAssessment(gameId: string | null, ending: MissionEnding) {
+  if (gameId === 'adaptabilidad') {
+    return {
+      name: 'Ejecutor Adaptativo',
+      fit: 'Apto para contextos de cambio acelerado, adopcion de nuevas herramientas y foco en resultados.',
+    };
+  }
+
+  if (gameId === 'liderazgo') {
+    return {
+      name: 'Coordinador Estrategico',
+      fit: 'Apto para priorizacion de iniciativas, asignacion de recursos y alineacion de equipos.',
+    };
+  }
+
+  if (gameId === 'colaboracion') {
+    return {
+      name: 'Lider Colaborativo',
+      fit: 'Apto para trabajo interareas, comunicacion efectiva y construccion de acuerdos sostenibles.',
+    };
+  }
+
+  if (gameId === 'resolucion') {
+    return {
+      name: 'Resolutor Analitico',
+      fit: 'Apto para diagnostico de problemas complejos, analisis de riesgo y decisiones basadas en evidencia.',
+    };
+  }
+
+  return {
+    name: ending.executiveProfile,
+    fit: ending.executiveFit,
   };
 }
 
@@ -570,6 +619,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
   const state = crisisState(score, maxScore);
   const chapterIndex = Math.min(currentQuestionIndex, CHAPTERS.length - 1);
   const ending = resolveMissionEnding(decisions, score, maxScore);
+  const executiveResult = executiveProfileByAssessment(activeGame?.id ?? null, ending);
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
@@ -766,6 +816,10 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   <p className="mt-1 text-xs text-emerald-300">
                     Perfil dominante: {profileLabel(ending.profile)} · {ending.recommendation}
                   </p>
+                </div>
+                <div className="mt-3 rounded-lg border border-sky-700/60 bg-sky-950/30 p-3">
+                  <p className="text-sm font-semibold text-sky-100">Perfil ejecutivo sugerido: {executiveResult.name}</p>
+                  <p className="text-sm text-sky-200">{executiveResult.fit}</p>
                 </div>
                 {isSaving ? <p className="mt-3 text-sm text-emerald-200">Guardando resultado...</p> : null}
                 <div className="mt-4 space-y-2">
