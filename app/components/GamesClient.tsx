@@ -27,68 +27,68 @@ const TESTS: TestGame[] = [
   {
     id: 'conducta-base',
     title: 'Evaluacion 1: Conducta Base (Hogan)',
-    description: 'Analiza patrones de comportamiento estables frente a presion, cambio y toma de decisiones.',
+    description: 'Mide estabilidad conductual bajo presion, control de derailers y consistencia de caracter frente a adversidad.',
     questions: [
       {
-        scene: 'Un cliente clave cambia alcance 72 horas antes del cierre trimestral y se desordena el plan operativo.',
-        prompt: 'Tu primera accion para sostener resultados es:',
+        scene: '[Hogan — Estabilidad emocional] El iceberg acaba de partirse. En 20 minutos una zona de datos del cliente queda sin cobertura y tu equipo espera direccion.',
+        prompt: 'Bajo presion extrema, como reaccionas primero?',
         options: [
           {
-            action: 'Redisenar el plan con dos rutas de entrega y responsables claros',
-            consequence: 'El equipo se reacomoda rapido sin frenar la operacion.',
+            action: 'Mantener tono calmado, enunciar el riesgo con claridad y dar un paso inicial concreto',
+            consequence: 'Estabilidad alta: el equipo lee confianza y ejecuta. Bajo derailer de volatilidad.',
             points: 2,
           },
           {
-            action: 'Esperar aprobacion total de direccion antes de actuar',
-            consequence: 'Ganas certeza, pero pierdes una ventana de ejecucion.',
+            action: 'Pedir tiempo para analizar antes de comunicar algo al equipo',
+            consequence: 'Prudente, pero genera incertidumbre en el equipo en el momento critico.',
             points: 1,
           },
           {
-            action: 'Mantener el plan original aunque ya no responda al contexto',
-            consequence: 'Sube el riesgo de incumplir con el cliente.',
+            action: 'Escalar el problema a tu superior inmediatamente sin dar ninguna orientacion',
+            consequence: 'Derailer de cauteloso activo: delegas hacia arriba en lugar de liderar.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Llega un tablero de analitica predictiva para detectar desvio de costos y productividad.',
-        prompt: 'Como incorporas esta herramienta al trabajo diario?',
+        scene: '[Hogan — Confianza interpersonal] Un area externa descarto tu propuesta sin darte explicacion. El proyecto depende de su colaboracion.',
+        prompt: 'Como gestionas la relacion para continuar?',
         options: [
           {
-            action: 'Pilotear en un equipo chico y escalar con evidencia',
-            consequence: 'Aprendes rapido y ajustas decisiones con datos reales.',
+            action: 'Buscar feedback directo, reencuadrar el acuerdo y proponer un nuevo punto de partida',
+            consequence: 'Ajuste interpersonal efectivo: sin resentimiento ni pasividad.',
             points: 2,
           },
           {
-            action: 'Posponer su uso y continuar con reportes manuales',
-            consequence: 'Evitas friccion inicial, pero pierdes precision de gestion.',
-            points: 0,
+            action: 'Aceptar la decision y trabajar en paralelo sin coordinar',
+            consequence: 'Evitas conflicto, pero aumentas riesgo de duplicacion y tension latente.',
+            points: 1,
           },
           {
-            action: 'Asignar un referente de adopcion y revisar impacto semanal',
-            consequence: 'Integras la herramienta con avance gradual y controlado.',
-            points: 1,
+            action: 'Exigir explicacion formal antes de avanzar',
+            consequence: 'Derailer de arrogancia: postura defensiva que bloquea la colaboracion.',
+            points: 0,
           },
         ],
       },
       {
-        scene: 'El forecast comercial cambia tres veces en una semana y hay presion de cumplimiento.',
-        prompt: 'Con incertidumbre alta, como organizas la ejecucion?',
+        scene: '[Hogan — Consistencia de caracter] El equipo detecta que tomaste una decision diferente a lo que habias comprometido publicamente.',
+        prompt: 'Como manejas la brecha entre lo dicho y lo hecho?',
         options: [
           {
-            action: 'Trabajar en sprints cortos con chequeos de riesgo frecuentes',
-            consequence: 'El equipo mantiene foco y responde rapido al cambio.',
+            action: 'Reconocer el cambio, explicar el razonamiento y refirmar compromisos futuros',
+            consequence: 'Alta integridad conductual: el equipo aprende del proceso, no del error.',
             points: 2,
           },
           {
-            action: 'Sostener la modalidad actual para no generar ansiedad',
-            consequence: 'Hay calma inicial, pero menor capacidad de reaccion.',
-            points: 1,
+            action: 'Minimizar la diferencia y seguir adelante sin comentarlo',
+            consequence: 'Derailer de manipulacion pasiva: erosiona confianza a largo plazo.',
+            points: 0,
           },
           {
-            action: 'Pausar cambios hasta tener certidumbre completa',
-            consequence: 'La operacion pierde tiempo critico y competitividad.',
-            points: 0,
+            action: 'Justificar el cambio con factores externos sin asumir responsabilidad',
+            consequence: 'Baja consistencia percibida: el equipo pierde referencia de comportamiento esperado.',
+            points: 1,
           },
         ],
       },
@@ -97,67 +97,67 @@ const TESTS: TestGame[] = [
   {
     id: 'motivacion',
     title: 'Evaluacion 2: Motivacion (Gallup)',
-    description: 'Evalua energia, compromiso y foco en fortalezas al gestionar objetivos desafiantes.',
+    description: 'Evalua engagement, activacion de fortalezas personales y energia sostenida en contextos de alta demanda.',
     questions: [
       {
-        scene: 'Nadie define prioridad entre onboarding de un nuevo cliente enterprise o recuperacion de una cuenta en riesgo.',
-        prompt: 'Como lideras la decision inicial?',
+        scene: '[Gallup — Fortalezas] El nivel del agua subio y la mision cambia: ya no es evacuar, sino coordinar refugios. Tienes 3 personas con perfiles muy distintos.',
+        prompt: 'Como distribuyes el trabajo para que el equipo funcione al maximo?',
         options: [
           {
-            action: 'Definir criterios de priorizacion y asignar ownership por frente',
-            consequence: 'El equipo ejecuta con direccion clara y foco comun.',
+            action: 'Identificar la fortaleza dominante de cada uno y asignar el rol que la activa',
+            consequence: 'Engagement alto: cada persona trabaja desde su zona de energia optima.',
             points: 2,
           },
           {
-            action: 'Dejar que cada area decida sin una prioridad unificada',
-            consequence: 'Hay autonomia, pero se pierde coordinacion global.',
+            action: 'Asignar tareas por orden de jerarquia y disponibilidad inmediata',
+            consequence: 'Cobertura rapida, pero sin activar el potencial real del equipo.',
+            points: 1,
+          },
+          {
+            action: 'Dejar que cada uno elija lo que quiera hacer',
+            consequence: 'Autonomia alta, pero sin foco ni cobertura de areas criticas.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        scene: '[Gallup — Compromiso activo] Van 10 horas de crisis. El equipo empieza a desconectarse emocionalmente y la calidad de las decisiones baja.',
+        prompt: 'Como reactivas el compromiso del equipo sin perder ritmo operativo?',
+        options: [
+          {
+            action: 'Reconocer el esfuerzo de forma especifica y conectar el trabajo con proposito colectivo',
+            consequence: 'El engagement se recupera: el equipo vuelve a dar lo mejor.',
+            points: 2,
+          },
+          {
+            action: 'Pedir un mayor esfuerzo sin reconocimiento ni contexto',
+            consequence: 'Empuja a corto plazo, pero genera desgaste y distancia.',
             points: 0,
           },
           {
-            action: 'Tomar una decision temporal y revisarla con datos a corto plazo',
-            consequence: 'Mantienes ritmo y habilitas correccion rapida.',
+            action: 'Ofrecer un descanso sin abordar el estado emocional del equipo',
+            consequence: 'Alivia el cansancio fisico, pero no la desconexion motivacional.',
             points: 1,
           },
         ],
       },
       {
-        scene: 'Dos lideres de area discuten por presupuesto justo cuando entra una urgencia del cliente.',
-        prompt: 'Que accion tomas para resolver el conflicto?',
+        scene: '[Gallup — Energia sostenida] La crisis termino pero el equipo esta agotado y hay un cierre de trimestre exigente por delante.',
+        prompt: 'Como sostienes el alto rendimiento sin llegar al burnout?',
         options: [
           {
-            action: 'Facilitar dialogo breve, acordar criterio y cerrar compromiso operativo',
-            consequence: 'Se reduce friccion y vuelve la ejecucion coordinada.',
+            action: 'Planificar ciclos de intensidad y recuperacion, con foco en fortalezas por etapa',
+            consequence: 'Rendimiento sostenible: el equipo llega al cierre con energia y claridad.',
             points: 2,
           },
           {
-            action: 'Ignorar el conflicto y priorizar solo la urgencia del momento',
-            consequence: 'El problema se agrava y reaparece en el peor momento.',
+            action: 'Mantener la misma demanda y confiar en la resiliencia del equipo',
+            consequence: 'Riesgo de burnout alto: la performance cae en el momento clave.',
             points: 0,
           },
           {
-            action: 'Imponer una orden sin explicar criterio ni contexto',
-            consequence: 'Resuelves rapido, pero cae el compromiso del equipo.',
-            points: 1,
-          },
-        ],
-      },
-      {
-        scene: 'Debes cumplir un lanzamiento de producto y estabilizar soporte premium al mismo tiempo.',
-        prompt: 'Como delegas para sostener dos frentes criticos?',
-        options: [
-          {
-            action: 'Delegar por fortalezas y definir cadencia de reporte',
-            consequence: 'Aumenta la efectividad sin perder gobernanza.',
-            points: 2,
-          },
-          {
-            action: 'Centralizar todo en tu aprobacion personal',
-            consequence: 'Se convierte en cuello de botella operativo.',
-            points: 0,
-          },
-          {
-            action: 'Repartir tareas por disponibilidad y no por capacidad',
-            consequence: 'Hay velocidad inicial, pero suben errores de ejecucion.',
+            action: 'Reducir la carga pero sin comunicar criterios de prioridad',
+            consequence: 'Alivia presion, pero genera confusion sobre lo que importa.',
             points: 1,
           },
         ],
@@ -167,68 +167,68 @@ const TESTS: TestGame[] = [
   {
     id: 'cognicion',
     title: 'Evaluacion 3: Cognicion (Pymetrics)',
-    description: 'Mide razonamiento, aprendizaje adaptativo y calidad de decision en escenarios con incertidumbre.',
+    description: 'Mide tolerancia al riesgo, aprendizaje adaptativo por ensayo-error y calidad de razonamiento bajo incertidumbre.',
     questions: [
       {
-        scene: 'El equipo de implementacion se atrasa y compromete una fecha acordada con cliente.',
-        prompt: 'Como colaboras para recuperar ritmo?',
+        scene: '[Pymetrics — Tolerancia al riesgo] Tienes dos rutas de evacuacion. La A es segura pero lenta. La B es rapida pero hay un 35% de probabilidad de bloqueo por hielo.',
+        prompt: 'Que ruta eliges y como lo comunicas al equipo?',
         options: [
           {
-            action: 'Alinear al equipo, detectar bloqueos y redistribuir capacidad',
-            consequence: 'Se recupera el flujo de entrega entre areas.',
+            action: 'Elegir la ruta B con contingencia preparada y comunicar el riesgo de forma transparente',
+            consequence: 'Tolerancia al riesgo calibrada: velocidad con gestion activa de la incertidumbre.',
             points: 2,
           },
           {
-            action: 'Esperar a que el equipo lo resuelva sin intervencion',
-            consequence: 'El retraso impacta al cliente y a la reputacion.',
-            points: 0,
-          },
-          {
-            action: 'Escalar directamente sin conversar primero con el equipo',
-            consequence: 'Hay visibilidad, pero no solucion inmediata.',
-            points: 1,
-          },
-        ],
-      },
-      {
-        scene: 'En comite participan Ventas, Producto y Customer Success con prioridades distintas.',
-        prompt: 'Que comportamiento aporta mas al trabajo conjunto?',
-        options: [
-          {
-            action: 'Escuchar prioridades, sintetizar y proponer secuencia comun',
-            consequence: 'Los equipos se alinean en un mismo plan de accion.',
-            points: 2,
-          },
-          {
-            action: 'Interrumpir para imponer una solucion rapida',
-            consequence: 'La reunion termina antes, pero sube la resistencia.',
+            action: 'Elegir la ruta A sin evaluar si el tiempo perdido tambien es un riesgo',
+            consequence: 'Baja tolerancia al riesgo: evita la perdida inmediata pero ignora el costo de la lentitud.',
             points: 1,
           },
           {
-            action: 'Mantenerte al margen para evitar conflicto',
-            consequence: 'Se pierde informacion clave para la decision final.',
+            action: 'No decidir y esperar mas informacion antes de mover al equipo',
+            consequence: 'Paralisis por analisis: el tiempo de inaccion genera un riesgo mayor.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Tras un trimestre exigente, el equipo logra estabilizar cuentas criticas.',
-        prompt: 'Como defines exito del equipo?',
+        scene: '[Pymetrics — Aprendizaje adaptativo] Intentaste una estrategia de contencion que fallo. El mismo escenario volvera en 2 horas.',
+        prompt: 'Como ajustas tu enfoque con lo que acabas de aprender?',
         options: [
           {
-            action: 'Medir impacto global, NPS interno y aprendizajes compartidos',
-            consequence: 'Se fortalece la colaboracion futura y la mejora continua.',
+            action: 'Identificar que supuesto fallo, corregirlo puntualmente y reprobarlo con ajuste minimo',
+            consequence: 'Aprendizaje adaptativo rapido: mejora incremental sin sobreingenieria.',
             points: 2,
           },
           {
-            action: 'Reconocer solo al mejor rendimiento individual',
-            consequence: 'Motiva a pocos y debilita cohesion de equipo.',
+            action: 'Descartar la estrategia completa y empezar desde cero',
+            consequence: 'Reseteo total: se pierde lo que funciono y se gasta tiempo critico.',
             points: 0,
           },
           {
-            action: 'Cerrar el ciclo sin retroalimentacion por falta de tiempo',
-            consequence: 'Se pierde informacion valiosa para evolucionar.',
+            action: 'Repetir la misma estrategia esperando un resultado diferente por el contexto',
+            consequence: 'Sin aprendizaje: ignora la evidencia del primer intento.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        scene: '[Pymetrics — Razonamiento bajo presion] Recibes tres senales contradictorias al mismo tiempo: el GPS dice avanzar, el sensor dice frenar y un tripulante dice esperar.',
+        prompt: 'Como tomas la decision con informacion ambigua?',
+        options: [
+          {
+            action: 'Ponderar fuentes segun confiabilidad historica y decidir con el criterio mas robusto',
+            consequence: 'Razonamiento de alta calidad: usa evidencia diferenciada en lugar de promediar.',
+            points: 2,
+          },
+          {
+            action: 'Promediar las tres senales y buscar una accion intermedia',
+            consequence: 'Decision conservadora: reduce riesgo extremo pero puede ignorar la senal correcta.',
             points: 1,
+          },
+          {
+            action: 'Elegir la senal que confirma lo que ya planeabas hacer',
+            consequence: 'Sesgo de confirmacion activo: decision influida por creencia previa, no por evidencia.',
+            points: 0,
           },
         ],
       },
@@ -237,68 +237,68 @@ const TESTS: TestGame[] = [
   {
     id: 'skills',
     title: 'Evaluacion 4: Skills (SHL)',
-    description: 'Valida habilidades aplicadas para ejecucion, priorizacion, comunicacion y resolucion en contexto real.',
+    description: 'Valida competencias aplicadas: planificacion, comunicacion asertiva y resolucion de problemas con impacto medible.',
     questions: [
       {
-        scene: 'La plataforma principal sufre caidas intermitentes durante horario pico de clientes.',
-        prompt: 'Cual es tu primer movimiento para resolver?',
+        scene: '[SHL — Planificacion y organizacion] Tienes 4 horas para coordinar el cierre de dos zonas de riesgo con recursos limitados y sin margen de error.',
+        prompt: 'Como estructuras el plan de ejecucion?',
         options: [
           {
-            action: 'Revisar metricas, aislar causa raiz y activar plan de contingencia',
-            consequence: 'La falla se controla sin frenar la operacion.',
+            action: 'Definir prioridades por impacto, asignar recursos con criterio y establecer hitos de control',
+            consequence: 'Competencia de planificacion alta: ejecucion ordenada con visibilidad de avance.',
             points: 2,
           },
           {
-            action: 'Reiniciar servicios repetidamente sin diagnostico',
-            consequence: 'Puede aliviar momentaneamente, pero el riesgo persiste.',
-            points: 0,
+            action: 'Empezar por la tarea mas urgente y resolver el resto sobre la marcha',
+            consequence: 'Estilo reactivo: efectivo a corto plazo pero sin estructura para sostener el ritmo.',
+            points: 1,
           },
           {
-            action: 'Atribuir la falla al contexto externo y esperar mejora',
-            consequence: 'No se corrige el problema estructural.',
+            action: 'Esperar que el equipo se autoorganice y solo intervenir si hay problemas',
+            consequence: 'Delegacion sin estructura: el equipo pierde tiempo por falta de direccion.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Solo hay presupuesto para una iniciativa estrategica y dos unidades solicitan prioridad.',
-        prompt: 'Como decides la asignacion?',
+        scene: '[SHL — Comunicacion asertiva] Un stakeholder critico desestima tu evaluacion de riesgo en publico y propone una alternativa que consideras peligrosa.',
+        prompt: 'Como respondes en ese momento?',
         options: [
           {
-            action: 'Definir criterios de impacto, riesgo y time-to-value para priorizar',
-            consequence: 'La decision es transparente, defendible y efectiva.',
+            action: 'Exponer los datos que respaldan tu evaluacion y proponer una instancia de validacion conjunta',
+            consequence: 'Comunicacion asertiva: defiende la posicion con evidencia sin escalar el conflicto.',
             points: 2,
           },
           {
-            action: 'Elegir segun intuicion del momento',
-            consequence: 'Puede funcionar, pero no es un criterio escalable.',
-            points: 1,
+            action: 'Ceder para evitar tension y ajustar el plan en privado despues',
+            consequence: 'Pasividad situacional: el riesgo persiste y se pierde credibilidad tecnica.',
+            points: 0,
           },
           {
-            action: 'Posponer hasta lograr unanimidad completa',
-            consequence: 'La demora reduce velocidad de respuesta al negocio.',
-            points: 0,
+            action: 'Aceptar publicamente pero documentar el desacuerdo por escrito',
+            consequence: 'Estrategia de proteccion: genera registro, pero no resuelve el problema de raiz.',
+            points: 1,
           },
         ],
       },
       {
-        scene: 'Surgen tres soluciones para mitigar un riesgo tecnologico con impacto comercial.',
-        prompt: 'Como eliges la solucion final?',
+        scene: '[SHL — Resolucion de problemas] La evaluacion post-crisis revela que el mismo punto fallo tres veces. No hay tiempo para una solucion estructural antes del proximo ciclo.',
+        prompt: 'Como gestionas el problema con recursos limitados?',
         options: [
           {
-            action: 'Comparar impacto, costo, riesgo y dependencia tecnica',
-            consequence: 'Reduces probabilidad de falla critica y deuda futura.',
+            action: 'Implementar una mitigacion rapida documentada y escalar el problema estructural con evidencia',
+            consequence: 'Solucion pragmatica de alta competencia: protege el corto plazo y habilita la mejora.',
             points: 2,
           },
           {
-            action: 'Implementar la mas rapida sin validar efectos secundarios',
-            consequence: 'Ganas tiempo, pero aumentas riesgo estructural.',
-            points: 1,
+            action: 'Ignorar el patron porque no hay tiempo para resolverlo ahora',
+            consequence: 'Baja resolucion estructural: el problema se repite y el impacto escala.',
+            points: 0,
           },
           {
-            action: 'No decidir y mantener el estado actual',
-            consequence: 'El problema se agrava con cada nuevo incidente.',
-            points: 0,
+            action: 'Intentar resolver la causa raiz completa aunque implique retrasar otras entregas',
+            consequence: 'Perfeccionismo funcional: resuelve el fondo pero compromete compromisos actuales.',
+            points: 1,
           },
         ],
       },
