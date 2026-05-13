@@ -5,9 +5,13 @@ import { signOut } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 
 type Question = {
+  scene: string;
   prompt: string;
-  options: string[];
-  answer: number;
+  options: {
+    action: string;
+    consequence: string;
+    points: number;
+  }[];
 };
 
 type TestGame = {
@@ -20,89 +24,281 @@ type TestGame = {
 const TESTS: TestGame[] = [
   {
     id: 'adaptabilidad',
-    title: 'Test 1: Adaptabilidad',
-    description: 'Como reacciona la persona frente a cambios y escenarios nuevos.',
+    title: 'Mision 1: Adaptabilidad en Crisis Climática',
+    description: 'Diriges un barco de evacuacion cuando el iceberg central se fragmenta y sube el nivel del agua.',
     questions: [
       {
-        prompt: 'Si cambia el objetivo del equipo a ultimo momento, que haces primero?',
-        options: ['Espero instrucciones', 'Propongo una nueva ruta rapida', 'Me frustro y freno tareas'],
-        answer: 1,
+        scene: 'La ruta principal queda bloqueada por hielo desprendido y una avenida ya esta bajo agua.',
+        prompt: 'Tu primera accion para mantener la evacuacion en marcha es:',
+        options: [
+          {
+            action: 'Redibujar la ruta en tiempo real con dos alternativas',
+            consequence: 'El equipo se reacomoda rapido y el barco no se detiene.',
+            points: 2,
+          },
+          {
+            action: 'Esperar confirmacion completa del centro de mando',
+            consequence: 'Ganas certeza, pero pierdes una ventana de salida.',
+            points: 1,
+          },
+          {
+            action: 'Mantener la ruta original aunque ya no sea segura',
+            consequence: 'Sube el riesgo de encallar en escombros.',
+            points: 0,
+          },
+        ],
       },
       {
-        prompt: 'Frente a una herramienta nueva, normalmente...',
-        options: ['La exploro por mi cuenta', 'La evito hasta que sea obligatoria', 'Solo la uso si me capacitan'],
-        answer: 0,
+        scene: 'Recibes un mapa predictivo nuevo que marca zonas de corriente intensa.',
+        prompt: 'Como integras esta herramienta al operativo?',
+        options: [
+          {
+            action: 'La pruebas en un tramo corto y luego la aplicas al plan completo',
+            consequence: 'Aprendes rapido y ajustas con evidencia.',
+            points: 2,
+          },
+          {
+            action: 'La dejas para mas tarde y sigues con el metodo anterior',
+            consequence: 'Evitas el cambio, pero el plan queda menos preciso.',
+            points: 0,
+          },
+          {
+            action: 'Delegas su uso a una persona del equipo y revisas resultados',
+            consequence: 'Incorporas el recurso con adopcion gradual.',
+            points: 1,
+          },
+        ],
       },
       {
-        prompt: 'En un entorno incierto te sentis...',
-        options: ['Con energia para probar', 'Neutral', 'Muy incomodo'],
-        answer: 0,
+        scene: 'El pronostico cambia tres veces en quince minutos y la marea sigue subiendo.',
+        prompt: 'Con incertidumbre alta, que decision tomas?',
+        options: [
+          {
+            action: 'Fraccionar la mision en bloques cortos con chequeos cada 10 minutos',
+            consequence: 'El equipo mantiene foco y responde rapido a cambios.',
+            points: 2,
+          },
+          {
+            action: 'Continuar igual para no generar ansiedad en el equipo',
+            consequence: 'A corto plazo hay calma, pero baja la capacidad de reaccion.',
+            points: 1,
+          },
+          {
+            action: 'Pausar toda decision hasta tener certeza total',
+            consequence: 'La operacion pierde tiempo critico.',
+            points: 0,
+          },
+        ],
       },
     ],
   },
   {
     id: 'liderazgo',
-    title: 'Test 2: Liderazgo',
-    description: 'Mide iniciativa, toma de decisiones y capacidad de guiar equipos.',
+    title: 'Mision 2: Liderazgo Bajo Presion',
+    description: 'Coordinas tripulacion y brigadas de ciudad cuando el iceberg se parte en multiples placas.',
     questions: [
       {
-        prompt: 'Cuando nadie define un plan, vos...',
-        options: ['Espero al lider', 'Armo una propuesta y la comparto', 'Sigo haciendo lo minimo'],
-        answer: 1,
+        scene: 'Hay ruido en radio y nadie define prioridad entre puerto norte o barrio central.',
+        prompt: 'Como lideras la decision inicial?',
+        options: [
+          {
+            action: 'Definir criterio de prioridad y asignar responsables por frente',
+            consequence: 'El equipo actua con direccion clara.',
+            points: 2,
+          },
+          {
+            action: 'Esperar a que cada area decida por su cuenta',
+            consequence: 'Se gana autonomia, pero se pierde coordinacion.',
+            points: 0,
+          },
+          {
+            action: 'Tomar una decision temporal y revisarla en 15 minutos',
+            consequence: 'Mantienes ritmo y permites correccion.',
+            points: 1,
+          },
+        ],
       },
       {
-        prompt: 'Un conflicto en el equipo se resuelve mejor...',
-        options: ['Evitandolo', 'Con dialogo y acuerdos claros', 'Con imposicion directa'],
-        answer: 1,
+        scene: 'Dos jefes de cubierta discuten por combustible justo cuando llega otro pedido de rescate.',
+        prompt: 'Que accion tomas para resolver el conflicto?',
+        options: [
+          {
+            action: 'Abrir un dialogo breve, definir regla y cerrar con acuerdo operativo',
+            consequence: 'Se reduce friccion y vuelve la ejecucion.',
+            points: 2,
+          },
+          {
+            action: 'Ignorar el conflicto y seguir',
+            consequence: 'El problema reaparece en el peor momento.',
+            points: 0,
+          },
+          {
+            action: 'Imponer una orden sin explicar contexto',
+            consequence: 'Resuelves rapido pero cae el compromiso del equipo.',
+            points: 1,
+          },
+        ],
       },
       {
-        prompt: 'Para delegar tareas, priorizas...',
-        options: ['Control total', 'Fortalezas de cada persona', 'Velocidad sin contexto'],
-        answer: 1,
+        scene: 'Necesitas evacuar un hospital flotante y reforzar diques al mismo tiempo.',
+        prompt: 'Como delegas para sostener dos frentes criticos?',
+        options: [
+          {
+            action: 'Asignar tareas segun fortalezas y establecer puntos de reporte',
+            consequence: 'Aumenta la efectividad sin perder control.',
+            points: 2,
+          },
+          {
+            action: 'Centralizar todo para revisar cada detalle personalmente',
+            consequence: 'Se vuelve cuello de botella.',
+            points: 0,
+          },
+          {
+            action: 'Delegar al azar para ganar velocidad inmediata',
+            consequence: 'Hay rapidez inicial, pero errores de ejecucion.',
+            points: 1,
+          },
+        ],
       },
     ],
   },
   {
     id: 'colaboracion',
-    title: 'Test 3: Colaboracion',
-    description: 'Evalua trabajo en equipo, escucha y cooperacion.',
+    title: 'Mision 3: Colaboracion en Evacuacion',
+    description: 'El barco depende de coordinacion con voluntarios, hospitales y defensa civil en ciudades anegadas.',
     questions: [
       {
-        prompt: 'Cuando un companero se atrasa, vos...',
-        options: ['Lo ignoras', 'Ofreces ayuda para destrabar', 'Reportas sin hablarle'],
-        answer: 1,
+        scene: 'Una lancha de apoyo se atrasa y compromete el puente de traslado.',
+        prompt: 'Como colaboras para recuperar ritmo?',
+        options: [
+          {
+            action: 'Contactar al equipo, detectar bloqueo y redistribuir recursos',
+            consequence: 'Se recupera la cadena de evacuacion.',
+            points: 2,
+          },
+          {
+            action: 'Esperar a que se resuelva solo',
+            consequence: 'El retraso impacta a toda la operacion.',
+            points: 0,
+          },
+          {
+            action: 'Escalar el problema sin hablar con la lancha',
+            consequence: 'Se gana visibilidad pero no solucion inmediata.',
+            points: 1,
+          },
+        ],
       },
       {
-        prompt: 'En reuniones, normalmente...',
-        options: ['Interrumpis para ganar tiempo', 'Escuchas y aportas con orden', 'No participas'],
-        answer: 1,
+        scene: 'En mesa de crisis participan bomberos, medicos y navegacion con urgencias distintas.',
+        prompt: 'Que comportamiento aporta mas al trabajo conjunto?',
+        options: [
+          {
+            action: 'Escuchar prioridades, sintetizar y proponer secuencia comun',
+            consequence: 'Los equipos se alinean en una sola hoja de ruta.',
+            points: 2,
+          },
+          {
+            action: 'Interrumpir para imponer tu solucion rapidamente',
+            consequence: 'Se acorta la reunion, pero sube la resistencia.',
+            points: 1,
+          },
+          {
+            action: 'Mantenerte al margen para evitar conflicto',
+            consequence: 'Se pierde informacion clave de navegacion.',
+            points: 0,
+          },
+        ],
       },
       {
-        prompt: 'Un buen resultado de equipo significa...',
-        options: ['Lucirte individualmente', 'Cumplir objetivos en conjunto', 'Evitar responsabilidades'],
-        answer: 1,
+        scene: 'Tras 6 horas, logran estabilizar tres zonas inundadas.',
+        prompt: 'Como defines exito del equipo?',
+        options: [
+          {
+            action: 'Medir impacto global y aprendizajes compartidos',
+            consequence: 'Se fortalece la coordinacion futura.',
+            points: 2,
+          },
+          {
+            action: 'Destacar solo el rendimiento individual mas alto',
+            consequence: 'Motiva a pocos y debilita la cohesion.',
+            points: 0,
+          },
+          {
+            action: 'Cerrar sin retroalimentacion por falta de tiempo',
+            consequence: 'Se pierde mejora continua.',
+            points: 1,
+          },
+        ],
       },
     ],
   },
   {
     id: 'resolucion',
-    title: 'Test 4: Resolucion de Problemas',
-    description: 'Analiza pensamiento critico y enfoque para resolver desafios.',
+    title: 'Mision 4: Resolucion de Problemas',
+    description: 'Debes resolver fallas tecnicas mientras la ciudad sigue inundandose por desprendimiento del iceberg.',
     questions: [
       {
-        prompt: 'Si un proceso falla repetidamente, primero...',
-        options: ['Buscas causa raiz con datos', 'Repetis lo mismo', 'Culpas al contexto'],
-        answer: 0,
+        scene: 'La bomba principal del barco pierde potencia en plena marea alta.',
+        prompt: 'Cual es tu primer movimiento para resolver?',
+        options: [
+          {
+            action: 'Revisar datos de presion, aislar causa raiz y aplicar contingencia',
+            consequence: 'La falla se controla sin frenar la mision.',
+            points: 2,
+          },
+          {
+            action: 'Reiniciar el sistema varias veces sin diagnostico',
+            consequence: 'Puede funcionar, pero el riesgo persiste.',
+            points: 0,
+          },
+          {
+            action: 'Atribuir la falla al clima y esperar mejora',
+            consequence: 'No se corrige el problema tecnico.',
+            points: 0,
+          },
+        ],
       },
       {
-        prompt: 'Una decision compleja se mejora con...',
-        options: ['Suposiciones', 'Criterios claros y evidencia', 'Impulsividad'],
-        answer: 1,
+        scene: 'Tienes combustible para una sola maniobra grande y dos barrios por asistir.',
+        prompt: 'Como decides el destino del barco?',
+        options: [
+          {
+            action: 'Definir criterios de impacto, riesgo y tiempo para priorizar',
+            consequence: 'La decision es defendible y efectiva.',
+            points: 2,
+          },
+          {
+            action: 'Elegir segun intuicion del momento',
+            consequence: 'Puede salir bien, pero no es reproducible.',
+            points: 1,
+          },
+          {
+            action: 'Posponer la decision hasta recibir unanimidad',
+            consequence: 'La demora reduce la capacidad de rescate.',
+            points: 0,
+          },
+        ],
       },
       {
-        prompt: 'Cuando hay varias soluciones posibles...',
-        options: ['Elegis al azar', 'Comparas impacto y riesgo', 'No decidis'],
-        answer: 1,
+        scene: 'Aparecen tres soluciones para reforzar el casco frente a nuevos bloques de hielo.',
+        prompt: 'Como eliges la solucion final?',
+        options: [
+          {
+            action: 'Comparar impacto, costo y riesgo antes de ejecutar',
+            consequence: 'Reduces probabilidad de falla critica.',
+            points: 2,
+          },
+          {
+            action: 'Aplicar la mas rapida sin validar efectos secundarios',
+            consequence: 'Ganas tiempo, pero sumas riesgo estructural.',
+            points: 1,
+          },
+          {
+            action: 'No elegir y mantener configuracion actual',
+            consequence: 'El problema se agrava con cada ola.',
+            points: 0,
+          },
+        ],
       },
     ],
   },
@@ -114,6 +310,48 @@ function scoreLabel(score: number, total: number) {
   if (ratio >= 0.5) return 'Potencial medio';
   return 'Potencial a desarrollar';
 }
+
+function crisisState(score: number, maxScore: number) {
+  const ratio = maxScore === 0 ? 0 : score / maxScore;
+
+  if (ratio >= 0.8) {
+    return {
+      seaLevel: 38,
+      cityDamage: 20,
+      icebergCrack: 15,
+      boatTilt: -2,
+      tone: 'Control operativo alto',
+      toneClass: 'text-emerald-300',
+    };
+  }
+
+  if (ratio >= 0.5) {
+    return {
+      seaLevel: 50,
+      cityDamage: 45,
+      icebergCrack: 45,
+      boatTilt: 2,
+      tone: 'Crisis contenida con tension',
+      toneClass: 'text-amber-300',
+    };
+  }
+
+  return {
+    seaLevel: 64,
+    cityDamage: 72,
+    icebergCrack: 75,
+    boatTilt: 6,
+    tone: 'Crisis alta, plan inestable',
+    toneClass: 'text-rose-300',
+  };
+}
+
+type Decision = {
+  step: number;
+  action: string;
+  consequence: string;
+  points: number;
+};
 
 type GamesClientProps = {
   userName: string;
@@ -135,6 +373,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
   const [finished, setFinished] = useState(false);
   const [history, setHistory] = useState<StoredResult[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [decisions, setDecisions] = useState<Decision[]>([]);
 
   const activeGame = useMemo(
     () => TESTS.find((game) => game.id === activeGameId) || null,
@@ -187,21 +426,31 @@ export default function GamesClient({ userName }: GamesClientProps) {
     setCurrentQuestionIndex(0);
     setScore(0);
     setFinished(false);
+    setDecisions([]);
   };
 
   const onSelectOption = (optionIndex: number) => {
     if (!activeGame) return;
 
     const currentQuestion = activeGame.questions[currentQuestionIndex];
-    const isCorrect = optionIndex === currentQuestion.answer;
-    const nextScore = score + (isCorrect ? 1 : 0);
+    const selectedOption = currentQuestion.options[optionIndex];
+    const nextScore = score + selectedOption.points;
 
     setScore(nextScore);
+    setDecisions((previous) => [
+      ...previous,
+      {
+        step: currentQuestionIndex + 1,
+        action: selectedOption.action,
+        consequence: selectedOption.consequence,
+        points: selectedOption.points,
+      },
+    ]);
 
     const isLast = currentQuestionIndex === activeGame.questions.length - 1;
     if (isLast) {
       setFinished(true);
-      void persistResult(nextScore, activeGame.questions.length);
+      void persistResult(nextScore, activeGame.questions.length * 2);
       return;
     }
 
@@ -213,11 +462,15 @@ export default function GamesClient({ userName }: GamesClientProps) {
     setCurrentQuestionIndex(0);
     setScore(0);
     setFinished(false);
+    setDecisions([]);
   };
 
   const onLogout = async () => {
     await signOut({ callbackUrl: '/login' });
   };
+
+  const maxScore = activeGame ? activeGame.questions.length * 2 : 0;
+  const state = crisisState(score, maxScore);
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
@@ -225,10 +478,10 @@ export default function GamesClient({ userName }: GamesClientProps) {
         <header className="mb-10 rounded-2xl border border-slate-800 bg-slate-900 p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-widest text-sky-300">Zona de Juegos Test</p>
+              <p className="text-sm uppercase tracking-widest text-sky-300">Simulador Nawaiam</p>
               <h1 className="text-3xl font-bold">Hola, {userName}</h1>
               <p className="mt-2 text-slate-300">
-                Esta es tu segunda pagina con 4 juegos web tipo test. Puedes reemplazar cada uno por tu juego final.
+                Evalua decisiones en una crisis de inundacion: cada accion elegida impacta el resultado del test.
               </p>
             </div>
             <div className="flex gap-3">
@@ -253,14 +506,14 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   key={game.id}
                   className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6"
                 >
-                  <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Juego activo</p>
+                  <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Simulacion activa</p>
                   <h2 className="text-2xl font-semibold">{game.title}</h2>
                   <p className="mt-3 text-slate-300">{game.description}</p>
                   <button
                     onClick={() => onStartGame(game.id)}
                     className="mt-6 rounded-lg bg-sky-500 px-4 py-2 font-semibold text-slate-900 transition hover:bg-sky-400"
                   >
-                    Comenzar test
+                    Iniciar mision
                   </button>
                 </article>
               ))}
@@ -296,24 +549,91 @@ export default function GamesClient({ userName }: GamesClientProps) {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-2xl font-semibold">{activeGame.title}</h2>
               <button onClick={onCloseGame} className="rounded-lg border border-slate-700 px-3 py-2 hover:bg-slate-800">
-                Salir del test
+                Salir de la mision
               </button>
+            </div>
+
+            <div className="mb-6 overflow-hidden rounded-xl border border-sky-900/60 bg-slate-950 p-4">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm text-slate-300">Escenario: Puerto metropolitano en inundacion</p>
+                <p className={`text-sm font-semibold ${state.toneClass}`}>{state.tone}</p>
+              </div>
+              <svg viewBox="0 0 900 280" className="h-52 w-full">
+                <defs>
+                  <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#0f172a" />
+                    <stop offset="100%" stopColor="#1e293b" />
+                  </linearGradient>
+                  <linearGradient id="water" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#0ea5e9" />
+                    <stop offset="100%" stopColor="#075985" />
+                  </linearGradient>
+                </defs>
+
+                <rect x="0" y="0" width="900" height="280" fill="url(#sky)" />
+
+                <rect
+                  x="0"
+                  y={280 - state.seaLevel * 3}
+                  width="900"
+                  height={state.seaLevel * 3}
+                  fill="url(#water)"
+                  opacity="0.85"
+                />
+
+                <g opacity="0.85">
+                  <rect x="620" y="110" width="22" height={90 + state.cityDamage} fill="#334155" />
+                  <rect x="648" y="80" width="30" height={120 + state.cityDamage} fill="#475569" />
+                  <rect x="684" y="96" width="24" height={104 + state.cityDamage} fill="#334155" />
+                  <rect x="714" y="74" width="38" height={126 + state.cityDamage} fill="#1e293b" />
+                </g>
+
+                <g transform={`translate(180, 78) rotate(${state.boatTilt})`}>
+                  <polygon points="0,70 180,70 148,102 24,102" fill="#7c2d12" />
+                  <rect x="42" y="36" width="92" height="34" rx="4" fill="#cbd5e1" />
+                  <rect x="74" y="10" width="8" height="60" fill="#94a3b8" />
+                  <polygon points="82,12 132,35 82,35" fill="#e2e8f0" />
+                </g>
+
+                <g>
+                  <polygon
+                    points={`500,190 560,50 620,190`}
+                    fill="#bfdbfe"
+                    opacity="0.9"
+                    stroke="#7dd3fc"
+                    strokeWidth="2"
+                  />
+                  <line
+                    x1="560"
+                    y1="55"
+                    x2={560 + state.icebergCrack}
+                    y2="190"
+                    stroke="#0f172a"
+                    strokeWidth="3"
+                    opacity="0.8"
+                  />
+                </g>
+              </svg>
             </div>
 
             {!finished ? (
               <div>
                 <p className="mb-2 text-sm text-sky-300">
-                  Pregunta {currentQuestionIndex + 1} de {activeGame.questions.length}
+                  Decision {currentQuestionIndex + 1} de {activeGame.questions.length}
+                </p>
+                <p className="mb-2 rounded-lg border border-slate-700 bg-slate-800/60 p-3 text-sm text-slate-200">
+                  {activeGame.questions[currentQuestionIndex].scene}
                 </p>
                 <h3 className="mb-5 text-xl">{activeGame.questions[currentQuestionIndex].prompt}</h3>
                 <div className="grid gap-3">
                   {activeGame.questions[currentQuestionIndex].options.map((option, index) => (
                     <button
-                      key={option}
+                      key={option.action}
                       onClick={() => onSelectOption(index)}
                       className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-left transition hover:border-sky-400 hover:bg-slate-700"
                     >
-                      {option}
+                      <p className="font-semibold text-slate-100">{option.action}</p>
+                      <p className="mt-1 text-sm text-slate-300">{option.consequence}</p>
                     </button>
                   ))}
                 </div>
@@ -322,15 +642,24 @@ export default function GamesClient({ userName }: GamesClientProps) {
               <div className="rounded-xl border border-emerald-600 bg-emerald-900/30 p-6">
                 <p className="text-sm uppercase tracking-widest text-emerald-300">Resultado</p>
                 <h3 className="mt-2 text-2xl font-bold">
-                  {score}/{activeGame.questions.length} respuestas correctas
+                  {score}/{activeGame.questions.length * 2} efectividad de decisiones
                 </h3>
-                <p className="mt-3 text-emerald-200">{scoreLabel(score, activeGame.questions.length)}</p>
+                <p className="mt-3 text-emerald-200">{scoreLabel(score, activeGame.questions.length * 2)}</p>
                 {isSaving ? <p className="mt-3 text-sm text-emerald-200">Guardando resultado...</p> : null}
+                <div className="mt-4 space-y-2">
+                  {decisions.map((decision) => (
+                    <div key={`${decision.step}-${decision.action}`} className="rounded-lg border border-emerald-700/60 bg-emerald-950/40 p-3">
+                      <p className="text-sm font-semibold text-emerald-100">Decision {decision.step}: {decision.action}</p>
+                      <p className="text-sm text-emerald-200/90">{decision.consequence}</p>
+                      <p className="text-xs text-emerald-300">Impacto: +{decision.points} punto(s)</p>
+                    </div>
+                  ))}
+                </div>
                 <button
                   onClick={onCloseGame}
                   className="mt-6 rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-slate-950 hover:bg-emerald-400"
                 >
-                  Elegir otro juego
+                  Elegir otra mision
                 </button>
               </div>
             )}
