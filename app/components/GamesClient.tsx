@@ -675,11 +675,18 @@ export default function GamesClient({ userName }: GamesClientProps) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <Image
+                src="/logos-png/logo-ver-b.png"
+                alt="Nawaiam"
+                width={120}
+                height={120}
+                className="mb-3 h-10 w-auto md:hidden"
+              />
+              <Image
                 src="/logos-png/logo-hor-b.png"
                 alt="Nawaiam"
                 width={200}
                 height={56}
-                className="mb-3 h-9 w-auto"
+                className="mb-3 hidden h-9 w-auto md:block"
               />
               <p className="text-sm uppercase tracking-widest text-sky-300">Assessment Center Nawaiam</p>
               <h1 className="text-3xl font-bold">Hola, {userName}</h1>

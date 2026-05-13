@@ -7,12 +7,20 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center">
           <Image
+            src="/logos-png/logo-ver.png"
+            alt="Nawaiam"
+            width={120}
+            height={120}
+            priority
+            className="h-10 w-auto md:hidden"
+          />
+          <Image
             src="/logos-png/logo-hor.png"
             alt="Nawaiam"
             width={180}
             height={48}
             priority
-            className="h-9 w-auto"
+            className="hidden h-9 w-auto md:block"
           />
         </Link>
         <div className="hidden md:flex gap-8">
