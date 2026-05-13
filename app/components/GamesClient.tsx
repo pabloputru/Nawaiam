@@ -26,68 +26,68 @@ type TestGame = {
 const TESTS: TestGame[] = [
   {
     id: 'adaptabilidad',
-    title: 'Mision 1: Adaptabilidad en Crisis Climática',
-    description: 'Diriges un barco de evacuacion cuando el iceberg central se fragmenta y sube el nivel del agua.',
+    title: 'Evaluacion 1: Adaptabilidad en Cambio de Mercado',
+    description: 'Conduces una unidad de negocio mientras el mercado cambia y aparecen riesgos no previstos (efecto iceberg).',
     questions: [
       {
-        scene: 'La ruta principal queda bloqueada por hielo desprendido y una avenida ya esta bajo agua.',
-        prompt: 'Tu primera accion para mantener la evacuacion en marcha es:',
+        scene: 'Un cliente clave cambia alcance 72 horas antes del cierre trimestral y se desordena el plan operativo.',
+        prompt: 'Tu primera accion para sostener resultados es:',
         options: [
           {
-            action: 'Redibujar la ruta en tiempo real con dos alternativas',
-            consequence: 'El equipo se reacomoda rapido y el barco no se detiene.',
+            action: 'Redisenar el plan con dos rutas de entrega y responsables claros',
+            consequence: 'El equipo se reacomoda rapido sin frenar la operacion.',
             points: 2,
           },
           {
-            action: 'Esperar confirmacion completa del centro de mando',
-            consequence: 'Ganas certeza, pero pierdes una ventana de salida.',
+            action: 'Esperar aprobacion total de direccion antes de actuar',
+            consequence: 'Ganas certeza, pero pierdes una ventana de ejecucion.',
             points: 1,
           },
           {
-            action: 'Mantener la ruta original aunque ya no sea segura',
-            consequence: 'Sube el riesgo de encallar en escombros.',
+            action: 'Mantener el plan original aunque ya no responda al contexto',
+            consequence: 'Sube el riesgo de incumplir con el cliente.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Recibes un mapa predictivo nuevo que marca zonas de corriente intensa.',
-        prompt: 'Como integras esta herramienta al operativo?',
+        scene: 'Llega un tablero de analitica predictiva para detectar desvio de costos y productividad.',
+        prompt: 'Como incorporas esta herramienta al trabajo diario?',
         options: [
           {
-            action: 'La pruebas en un tramo corto y luego la aplicas al plan completo',
-            consequence: 'Aprendes rapido y ajustas con evidencia.',
+            action: 'Pilotear en un equipo chico y escalar con evidencia',
+            consequence: 'Aprendes rapido y ajustas decisiones con datos reales.',
             points: 2,
           },
           {
-            action: 'La dejas para mas tarde y sigues con el metodo anterior',
-            consequence: 'Evitas el cambio, pero el plan queda menos preciso.',
+            action: 'Posponer su uso y continuar con reportes manuales',
+            consequence: 'Evitas friccion inicial, pero pierdes precision de gestion.',
             points: 0,
           },
           {
-            action: 'Delegas su uso a una persona del equipo y revisas resultados',
-            consequence: 'Incorporas el recurso con adopcion gradual.',
+            action: 'Asignar un referente de adopcion y revisar impacto semanal',
+            consequence: 'Integras la herramienta con avance gradual y controlado.',
             points: 1,
           },
         ],
       },
       {
-        scene: 'El pronostico cambia tres veces en quince minutos y la marea sigue subiendo.',
-        prompt: 'Con incertidumbre alta, que decision tomas?',
+        scene: 'El forecast comercial cambia tres veces en una semana y hay presion de cumplimiento.',
+        prompt: 'Con incertidumbre alta, como organizas la ejecucion?',
         options: [
           {
-            action: 'Fraccionar la mision en bloques cortos con chequeos cada 10 minutos',
-            consequence: 'El equipo mantiene foco y responde rapido a cambios.',
+            action: 'Trabajar en sprints cortos con chequeos de riesgo frecuentes',
+            consequence: 'El equipo mantiene foco y responde rapido al cambio.',
             points: 2,
           },
           {
-            action: 'Continuar igual para no generar ansiedad en el equipo',
-            consequence: 'A corto plazo hay calma, pero baja la capacidad de reaccion.',
+            action: 'Sostener la modalidad actual para no generar ansiedad',
+            consequence: 'Hay calma inicial, pero menor capacidad de reaccion.',
             points: 1,
           },
           {
-            action: 'Pausar toda decision hasta tener certeza total',
-            consequence: 'La operacion pierde tiempo critico.',
+            action: 'Pausar cambios hasta tener certidumbre completa',
+            consequence: 'La operacion pierde tiempo critico y competitividad.',
             points: 0,
           },
         ],
@@ -96,68 +96,68 @@ const TESTS: TestGame[] = [
   },
   {
     id: 'liderazgo',
-    title: 'Mision 2: Liderazgo Bajo Presion',
-    description: 'Coordinas tripulacion y brigadas de ciudad cuando el iceberg se parte en multiples placas.',
+    title: 'Evaluacion 2: Liderazgo Bajo Presion',
+    description: 'Debes alinear equipos de negocio, operaciones y cliente cuando emergen riesgos ocultos del proyecto.',
     questions: [
       {
-        scene: 'Hay ruido en radio y nadie define prioridad entre puerto norte o barrio central.',
+        scene: 'Nadie define prioridad entre onboarding de un nuevo cliente enterprise o recuperacion de una cuenta en riesgo.',
         prompt: 'Como lideras la decision inicial?',
         options: [
           {
-            action: 'Definir criterio de prioridad y asignar responsables por frente',
-            consequence: 'El equipo actua con direccion clara.',
+            action: 'Definir criterios de priorizacion y asignar ownership por frente',
+            consequence: 'El equipo ejecuta con direccion clara y foco comun.',
             points: 2,
           },
           {
-            action: 'Esperar a que cada area decida por su cuenta',
-            consequence: 'Se gana autonomia, pero se pierde coordinacion.',
+            action: 'Dejar que cada area decida sin una prioridad unificada',
+            consequence: 'Hay autonomia, pero se pierde coordinacion global.',
             points: 0,
           },
           {
-            action: 'Tomar una decision temporal y revisarla en 15 minutos',
-            consequence: 'Mantienes ritmo y permites correccion.',
+            action: 'Tomar una decision temporal y revisarla con datos a corto plazo',
+            consequence: 'Mantienes ritmo y habilitas correccion rapida.',
             points: 1,
           },
         ],
       },
       {
-        scene: 'Dos jefes de cubierta discuten por combustible justo cuando llega otro pedido de rescate.',
+        scene: 'Dos lideres de area discuten por presupuesto justo cuando entra una urgencia del cliente.',
         prompt: 'Que accion tomas para resolver el conflicto?',
         options: [
           {
-            action: 'Abrir un dialogo breve, definir regla y cerrar con acuerdo operativo',
-            consequence: 'Se reduce friccion y vuelve la ejecucion.',
+            action: 'Facilitar dialogo breve, acordar criterio y cerrar compromiso operativo',
+            consequence: 'Se reduce friccion y vuelve la ejecucion coordinada.',
             points: 2,
           },
           {
-            action: 'Ignorar el conflicto y seguir',
-            consequence: 'El problema reaparece en el peor momento.',
+            action: 'Ignorar el conflicto y priorizar solo la urgencia del momento',
+            consequence: 'El problema se agrava y reaparece en el peor momento.',
             points: 0,
           },
           {
-            action: 'Imponer una orden sin explicar contexto',
-            consequence: 'Resuelves rapido pero cae el compromiso del equipo.',
+            action: 'Imponer una orden sin explicar criterio ni contexto',
+            consequence: 'Resuelves rapido, pero cae el compromiso del equipo.',
             points: 1,
           },
         ],
       },
       {
-        scene: 'Necesitas evacuar un hospital flotante y reforzar diques al mismo tiempo.',
+        scene: 'Debes cumplir un lanzamiento de producto y estabilizar soporte premium al mismo tiempo.',
         prompt: 'Como delegas para sostener dos frentes criticos?',
         options: [
           {
-            action: 'Asignar tareas segun fortalezas y establecer puntos de reporte',
-            consequence: 'Aumenta la efectividad sin perder control.',
+            action: 'Delegar por fortalezas y definir cadencia de reporte',
+            consequence: 'Aumenta la efectividad sin perder gobernanza.',
             points: 2,
           },
           {
-            action: 'Centralizar todo para revisar cada detalle personalmente',
-            consequence: 'Se vuelve cuello de botella.',
+            action: 'Centralizar todo en tu aprobacion personal',
+            consequence: 'Se convierte en cuello de botella operativo.',
             points: 0,
           },
           {
-            action: 'Delegar al azar para ganar velocidad inmediata',
-            consequence: 'Hay rapidez inicial, pero errores de ejecucion.',
+            action: 'Repartir tareas por disponibilidad y no por capacidad',
+            consequence: 'Hay velocidad inicial, pero suben errores de ejecucion.',
             points: 1,
           },
         ],
@@ -166,68 +166,68 @@ const TESTS: TestGame[] = [
   },
   {
     id: 'colaboracion',
-    title: 'Mision 3: Colaboracion en Evacuacion',
-    description: 'El barco depende de coordinacion con voluntarios, hospitales y defensa civil en ciudades anegadas.',
+    title: 'Evaluacion 3: Colaboracion Interareas',
+    description: 'Se mide como coordinas trabajo entre equipos internos y stakeholders del cliente en un contexto exigente.',
     questions: [
       {
-        scene: 'Una lancha de apoyo se atrasa y compromete el puente de traslado.',
+        scene: 'El equipo de implementacion se atrasa y compromete una fecha acordada con cliente.',
         prompt: 'Como colaboras para recuperar ritmo?',
         options: [
           {
-            action: 'Contactar al equipo, detectar bloqueo y redistribuir recursos',
-            consequence: 'Se recupera la cadena de evacuacion.',
+            action: 'Alinear al equipo, detectar bloqueos y redistribuir capacidad',
+            consequence: 'Se recupera el flujo de entrega entre areas.',
             points: 2,
           },
           {
-            action: 'Esperar a que se resuelva solo',
-            consequence: 'El retraso impacta a toda la operacion.',
+            action: 'Esperar a que el equipo lo resuelva sin intervencion',
+            consequence: 'El retraso impacta al cliente y a la reputacion.',
             points: 0,
           },
           {
-            action: 'Escalar el problema sin hablar con la lancha',
-            consequence: 'Se gana visibilidad pero no solucion inmediata.',
+            action: 'Escalar directamente sin conversar primero con el equipo',
+            consequence: 'Hay visibilidad, pero no solucion inmediata.',
             points: 1,
           },
         ],
       },
       {
-        scene: 'En mesa de crisis participan bomberos, medicos y navegacion con urgencias distintas.',
+        scene: 'En comite participan Ventas, Producto y Customer Success con prioridades distintas.',
         prompt: 'Que comportamiento aporta mas al trabajo conjunto?',
         options: [
           {
             action: 'Escuchar prioridades, sintetizar y proponer secuencia comun',
-            consequence: 'Los equipos se alinean en una sola hoja de ruta.',
+            consequence: 'Los equipos se alinean en un mismo plan de accion.',
             points: 2,
           },
           {
-            action: 'Interrumpir para imponer tu solucion rapidamente',
-            consequence: 'Se acorta la reunion, pero sube la resistencia.',
+            action: 'Interrumpir para imponer una solucion rapida',
+            consequence: 'La reunion termina antes, pero sube la resistencia.',
             points: 1,
           },
           {
             action: 'Mantenerte al margen para evitar conflicto',
-            consequence: 'Se pierde informacion clave de navegacion.',
+            consequence: 'Se pierde informacion clave para la decision final.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Tras 6 horas, logran estabilizar tres zonas inundadas.',
+        scene: 'Tras un trimestre exigente, el equipo logra estabilizar cuentas criticas.',
         prompt: 'Como defines exito del equipo?',
         options: [
           {
-            action: 'Medir impacto global y aprendizajes compartidos',
-            consequence: 'Se fortalece la coordinacion futura.',
+            action: 'Medir impacto global, NPS interno y aprendizajes compartidos',
+            consequence: 'Se fortalece la colaboracion futura y la mejora continua.',
             points: 2,
           },
           {
-            action: 'Destacar solo el rendimiento individual mas alto',
-            consequence: 'Motiva a pocos y debilita la cohesion.',
+            action: 'Reconocer solo al mejor rendimiento individual',
+            consequence: 'Motiva a pocos y debilita cohesion de equipo.',
             points: 0,
           },
           {
-            action: 'Cerrar sin retroalimentacion por falta de tiempo',
-            consequence: 'Se pierde mejora continua.',
+            action: 'Cerrar el ciclo sin retroalimentacion por falta de tiempo',
+            consequence: 'Se pierde informacion valiosa para evolucionar.',
             points: 1,
           },
         ],
@@ -236,68 +236,68 @@ const TESTS: TestGame[] = [
   },
   {
     id: 'resolucion',
-    title: 'Mision 4: Resolucion de Problemas',
-    description: 'Debes resolver fallas tecnicas mientras la ciudad sigue inundandose por desprendimiento del iceberg.',
+    title: 'Evaluacion 4: Resolucion de Problemas Complejos',
+    description: 'Evaluas problemas tecnicos y de negocio bajo presion, identificando causas raiz y decisiones de alto impacto.',
     questions: [
       {
-        scene: 'La bomba principal del barco pierde potencia en plena marea alta.',
+        scene: 'La plataforma principal sufre caidas intermitentes durante horario pico de clientes.',
         prompt: 'Cual es tu primer movimiento para resolver?',
         options: [
           {
-            action: 'Revisar datos de presion, aislar causa raiz y aplicar contingencia',
-            consequence: 'La falla se controla sin frenar la mision.',
+            action: 'Revisar metricas, aislar causa raiz y activar plan de contingencia',
+            consequence: 'La falla se controla sin frenar la operacion.',
             points: 2,
           },
           {
-            action: 'Reiniciar el sistema varias veces sin diagnostico',
-            consequence: 'Puede funcionar, pero el riesgo persiste.',
+            action: 'Reiniciar servicios repetidamente sin diagnostico',
+            consequence: 'Puede aliviar momentaneamente, pero el riesgo persiste.',
             points: 0,
           },
           {
-            action: 'Atribuir la falla al clima y esperar mejora',
-            consequence: 'No se corrige el problema tecnico.',
+            action: 'Atribuir la falla al contexto externo y esperar mejora',
+            consequence: 'No se corrige el problema estructural.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Tienes combustible para una sola maniobra grande y dos barrios por asistir.',
-        prompt: 'Como decides el destino del barco?',
+        scene: 'Solo hay presupuesto para una iniciativa estrategica y dos unidades solicitan prioridad.',
+        prompt: 'Como decides la asignacion?',
         options: [
           {
-            action: 'Definir criterios de impacto, riesgo y tiempo para priorizar',
-            consequence: 'La decision es defendible y efectiva.',
+            action: 'Definir criterios de impacto, riesgo y time-to-value para priorizar',
+            consequence: 'La decision es transparente, defendible y efectiva.',
             points: 2,
           },
           {
             action: 'Elegir segun intuicion del momento',
-            consequence: 'Puede salir bien, pero no es reproducible.',
+            consequence: 'Puede funcionar, pero no es un criterio escalable.',
             points: 1,
           },
           {
-            action: 'Posponer la decision hasta recibir unanimidad',
-            consequence: 'La demora reduce la capacidad de rescate.',
+            action: 'Posponer hasta lograr unanimidad completa',
+            consequence: 'La demora reduce velocidad de respuesta al negocio.',
             points: 0,
           },
         ],
       },
       {
-        scene: 'Aparecen tres soluciones para reforzar el casco frente a nuevos bloques de hielo.',
+        scene: 'Surgen tres soluciones para mitigar un riesgo tecnologico con impacto comercial.',
         prompt: 'Como eliges la solucion final?',
         options: [
           {
-            action: 'Comparar impacto, costo y riesgo antes de ejecutar',
-            consequence: 'Reduces probabilidad de falla critica.',
+            action: 'Comparar impacto, costo, riesgo y dependencia tecnica',
+            consequence: 'Reduces probabilidad de falla critica y deuda futura.',
             points: 2,
           },
           {
-            action: 'Aplicar la mas rapida sin validar efectos secundarios',
-            consequence: 'Ganas tiempo, pero sumas riesgo estructural.',
+            action: 'Implementar la mas rapida sin validar efectos secundarios',
+            consequence: 'Ganas tiempo, pero aumentas riesgo estructural.',
             points: 1,
           },
           {
-            action: 'No elegir y mantener configuracion actual',
-            consequence: 'El problema se agrava con cada ola.',
+            action: 'No decidir y mantener el estado actual',
+            consequence: 'El problema se agrava con cada nuevo incidente.',
             points: 0,
           },
         ],
