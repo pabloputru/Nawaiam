@@ -25,9 +25,9 @@ type TestGame = {
 
 const TESTS: TestGame[] = [
   {
-    id: 'adaptabilidad',
-    title: 'Evaluacion 1: Adaptabilidad en Cambio de Mercado',
-    description: 'Conduces una unidad de negocio mientras el mercado cambia y aparecen riesgos no previstos (efecto iceberg).',
+    id: 'conducta-base',
+    title: 'Evaluacion 1: Conducta Base (Hogan)',
+    description: 'Analiza patrones de comportamiento estables frente a presion, cambio y toma de decisiones.',
     questions: [
       {
         scene: 'Un cliente clave cambia alcance 72 horas antes del cierre trimestral y se desordena el plan operativo.',
@@ -95,9 +95,9 @@ const TESTS: TestGame[] = [
     ],
   },
   {
-    id: 'liderazgo',
-    title: 'Evaluacion 2: Liderazgo Bajo Presion',
-    description: 'Debes alinear equipos de negocio, operaciones y cliente cuando emergen riesgos ocultos del proyecto.',
+    id: 'motivacion',
+    title: 'Evaluacion 2: Motivacion (Gallup)',
+    description: 'Evalua energia, compromiso y foco en fortalezas al gestionar objetivos desafiantes.',
     questions: [
       {
         scene: 'Nadie define prioridad entre onboarding de un nuevo cliente enterprise o recuperacion de una cuenta en riesgo.',
@@ -165,9 +165,9 @@ const TESTS: TestGame[] = [
     ],
   },
   {
-    id: 'colaboracion',
-    title: 'Evaluacion 3: Colaboracion Interareas',
-    description: 'Se mide como coordinas trabajo entre equipos internos y stakeholders del cliente en un contexto exigente.',
+    id: 'cognicion',
+    title: 'Evaluacion 3: Cognicion (Pymetrics)',
+    description: 'Mide razonamiento, aprendizaje adaptativo y calidad de decision en escenarios con incertidumbre.',
     questions: [
       {
         scene: 'El equipo de implementacion se atrasa y compromete una fecha acordada con cliente.',
@@ -235,9 +235,9 @@ const TESTS: TestGame[] = [
     ],
   },
   {
-    id: 'resolucion',
-    title: 'Evaluacion 4: Resolucion de Problemas Complejos',
-    description: 'Evaluas problemas tecnicos y de negocio bajo presion, identificando causas raiz y decisiones de alto impacto.',
+    id: 'skills',
+    title: 'Evaluacion 4: Skills (SHL)',
+    description: 'Valida habilidades aplicadas para ejecucion, priorizacion, comunicacion y resolucion en contexto real.',
     questions: [
       {
         scene: 'La plataforma principal sufre caidas intermitentes durante horario pico de clientes.',
@@ -464,28 +464,28 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
 }
 
 function executiveProfileByAssessment(gameId: string | null, ending: MissionEnding) {
-  if (gameId === 'adaptabilidad') {
+  if (gameId === 'conducta-base') {
     return {
       name: 'Ejecutor Adaptativo',
       fit: 'Apto para contextos de cambio acelerado, adopcion de nuevas herramientas y foco en resultados.',
     };
   }
 
-  if (gameId === 'liderazgo') {
+  if (gameId === 'motivacion') {
     return {
       name: 'Coordinador Estrategico',
       fit: 'Apto para priorizacion de iniciativas, asignacion de recursos y alineacion de equipos.',
     };
   }
 
-  if (gameId === 'colaboracion') {
+  if (gameId === 'cognicion') {
     return {
       name: 'Lider Colaborativo',
       fit: 'Apto para trabajo interareas, comunicacion efectiva y construccion de acuerdos sostenibles.',
     };
   }
 
-  if (gameId === 'resolucion') {
+  if (gameId === 'skills') {
     return {
       name: 'Resolutor Analitico',
       fit: 'Apto para diagnostico de problemas complejos, analisis de riesgo y decisiones basadas en evidencia.',
@@ -631,6 +631,9 @@ export default function GamesClient({ userName }: GamesClientProps) {
               <h1 className="text-3xl font-bold">Hola, {userName}</h1>
               <p className="mt-2 text-slate-300">
                 Evaluacion conductual por escenarios: cada accion elegida impacta tu perfil de competencias.
+              </p>
+              <p className="mt-2 text-xs text-slate-400">
+                Framework: Conducta base (Hogan), Motivacion (Gallup), Cognicion (Pymetrics), Skills (SHL). Cultura (DISC) se usa como capa transversal.
               </p>
             </div>
             <div className="flex gap-3">
@@ -820,6 +823,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
                 <div className="mt-3 rounded-lg border border-sky-700/60 bg-sky-950/30 p-3">
                   <p className="text-sm font-semibold text-sky-100">Perfil ejecutivo sugerido: {executiveResult.name}</p>
                   <p className="text-sm text-sky-200">{executiveResult.fit}</p>
+                  <p className="mt-1 text-xs text-sky-300">Cultura (DISC): lectura transversal del estilo de interaccion y colaboracion.</p>
                 </div>
                 {isSaving ? <p className="mt-3 text-sm text-emerald-200">Guardando resultado...</p> : null}
                 <div className="mt-4 space-y-2">
