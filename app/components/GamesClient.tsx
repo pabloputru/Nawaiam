@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 type DecisionProfile = 'proactivo' | 'analitico' | 'reactivo';
 
 type Question = {
+  visual: string;
   scene: string;
   prompt: string;
   options: {
@@ -32,6 +33,7 @@ const TESTS: TestGame[] = [
     visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
     questions: [
       {
+        visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
         scene: '[Hogan — Estabilidad emocional] El iceberg acaba de partirse. En 20 minutos una zona de datos del cliente queda sin cobertura y tu equipo espera direccion.',
         prompt: 'Bajo presion extrema, como reaccionas primero?',
         options: [
@@ -53,6 +55,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/mapamundi-etapa2.jpg',
         scene: '[Hogan — Confianza interpersonal] Un area externa descarto tu propuesta sin darte explicacion. El proyecto depende de su colaboracion.',
         prompt: 'Como gestionas la relacion para continuar?',
         options: [
@@ -74,6 +77,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/mapamundi-etapa3.jpg',
         scene: '[Hogan — Consistencia de caracter] El equipo detecta que tomaste una decision diferente a lo que habias comprometido publicamente.',
         prompt: 'Como manejas la brecha entre lo dicho y lo hecho?',
         options: [
@@ -103,6 +107,7 @@ const TESTS: TestGame[] = [
     visual: '/imagenes-fijas/ciudad-1.jpg',
     questions: [
       {
+        visual: '/imagenes-fijas/ciudad-1.jpg',
         scene: '[Gallup — Fortalezas] El nivel del agua subio y la mision cambia: ya no es evacuar, sino coordinar refugios. Tienes 3 personas con perfiles muy distintos.',
         prompt: 'Como distribuyes el trabajo para que el equipo funcione al maximo?',
         options: [
@@ -124,6 +129,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/ciudad-2.jpg',
         scene: '[Gallup — Compromiso activo] Van 10 horas de crisis. El equipo empieza a desconectarse emocionalmente y la calidad de las decisiones baja.',
         prompt: 'Como reactivas el compromiso del equipo sin perder ritmo operativo?',
         options: [
@@ -145,6 +151,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/ciudad-3.jpg',
         scene: '[Gallup — Energia sostenida] La crisis termino pero el equipo esta agotado y hay un cierre de trimestre exigente por delante.',
         prompt: 'Como sostienes el alto rendimiento sin llegar al burnout?',
         options: [
@@ -174,6 +181,7 @@ const TESTS: TestGame[] = [
     visual: '/imagenes-fijas/ciudad-2.jpg',
     questions: [
       {
+        visual: '/imagenes-fijas/region-1-etapa1.jpg',
         scene: '[Pymetrics — Tolerancia al riesgo] Tienes dos rutas de evacuacion. La A es segura pero lenta. La B es rapida pero hay un 35% de probabilidad de bloqueo por hielo.',
         prompt: 'Que ruta eliges y como lo comunicas al equipo?',
         options: [
@@ -195,6 +203,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/region-2.jpg',
         scene: '[Pymetrics — Aprendizaje adaptativo] Intentaste una estrategia de contencion que fallo. El mismo escenario volvera en 2 horas.',
         prompt: 'Como ajustas tu enfoque con lo que acabas de aprender?',
         options: [
@@ -216,6 +225,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/migrantes.jpg',
         scene: '[Pymetrics — Razonamiento bajo presion] Recibes tres senales contradictorias al mismo tiempo: el GPS dice avanzar, el sensor dice frenar y un tripulante dice esperar.',
         prompt: 'Como tomas la decision con informacion ambigua?',
         options: [
@@ -245,6 +255,7 @@ const TESTS: TestGame[] = [
     visual: '/imagenes-fijas/region-2.jpg',
     questions: [
       {
+        visual: '/imagenes-fijas/intro-barco-2a.png',
         scene: '[SHL — Planificacion y organizacion] Tienes 4 horas para coordinar el cierre de dos zonas de riesgo con recursos limitados y sin margen de error.',
         prompt: 'Como estructuras el plan de ejecucion?',
         options: [
@@ -266,6 +277,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/zocalo-sobre-ciudad.jpg',
         scene: '[SHL — Comunicacion asertiva] Un stakeholder critico desestima tu evaluacion de riesgo en publico y propone una alternativa que consideras peligrosa.',
         prompt: 'Como respondes en ese momento?',
         options: [
@@ -287,6 +299,7 @@ const TESTS: TestGame[] = [
         ],
       },
       {
+        visual: '/imagenes-fijas/intro-barco-1a.png',
         scene: '[SHL — Resolucion de problemas] La evaluacion post-crisis revela que el mismo punto fallo tres veces. No hay tiempo para una solucion estructural antes del proximo ciclo.',
         prompt: 'Como gestionas el problema con recursos limitados?',
         options: [
@@ -625,6 +638,8 @@ export default function GamesClient({ userName }: GamesClientProps) {
   const chapterIndex = Math.min(currentQuestionIndex, CHAPTERS.length - 1);
   const ending = resolveMissionEnding(decisions, score, maxScore);
   const executiveResult = executiveProfileByAssessment(activeGame?.id ?? null, ending);
+  const activeQuestion = activeGame ? activeGame.questions[currentQuestionIndex] : null;
+  const activeVisual = activeQuestion?.visual ?? activeGame?.visual ?? '/imagenes-fijas/mapamundi-etapa1.jpg';
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
@@ -738,7 +753,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
               ) : null}
               <div className="relative">
                 <img
-                  src={activeGame.visual}
+                  src={activeVisual}
                   alt={`Visual del test ${activeGame.title}`}
                   className="h-56 w-full rounded-lg object-cover"
                 />
@@ -755,11 +770,11 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   Escenario {currentQuestionIndex + 1} de {activeGame.questions.length}
                 </p>
                 <p className="mb-2 rounded-lg border border-slate-700 bg-slate-800/60 p-3 text-sm text-slate-200">
-                  {activeGame.questions[currentQuestionIndex].scene}
+                  {activeQuestion?.scene}
                 </p>
-                <h3 className="mb-5 text-xl">{activeGame.questions[currentQuestionIndex].prompt}</h3>
+                <h3 className="mb-5 text-xl">{activeQuestion?.prompt}</h3>
                 <div className="grid gap-3">
-                  {activeGame.questions[currentQuestionIndex].options.map((option, index) => (
+                  {(activeQuestion?.options || []).map((option, index) => (
                     <button
                       key={option.action}
                       onClick={() => onSelectOption(index)}
