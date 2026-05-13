@@ -20,6 +20,7 @@ type TestGame = {
   id: string;
   title: string;
   description: string;
+  visual: string;
   questions: Question[];
 };
 
@@ -28,6 +29,7 @@ const TESTS: TestGame[] = [
     id: 'conducta-base',
     title: 'Evaluacion 1: Conducta Base (Hogan)',
     description: 'Mide estabilidad conductual bajo presion, control de derailers y consistencia de caracter frente a adversidad.',
+    visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
     questions: [
       {
         scene: '[Hogan — Estabilidad emocional] El iceberg acaba de partirse. En 20 minutos una zona de datos del cliente queda sin cobertura y tu equipo espera direccion.',
@@ -98,6 +100,7 @@ const TESTS: TestGame[] = [
     id: 'motivacion',
     title: 'Evaluacion 2: Motivacion (Gallup)',
     description: 'Evalua engagement, activacion de fortalezas personales y energia sostenida en contextos de alta demanda.',
+    visual: '/imagenes-fijas/ciudad-1.jpg',
     questions: [
       {
         scene: '[Gallup — Fortalezas] El nivel del agua subio y la mision cambia: ya no es evacuar, sino coordinar refugios. Tienes 3 personas con perfiles muy distintos.',
@@ -168,6 +171,7 @@ const TESTS: TestGame[] = [
     id: 'cognicion',
     title: 'Evaluacion 3: Cognicion (Pymetrics)',
     description: 'Mide tolerancia al riesgo, aprendizaje adaptativo por ensayo-error y calidad de razonamiento bajo incertidumbre.',
+    visual: '/imagenes-fijas/ciudad-2.jpg',
     questions: [
       {
         scene: '[Pymetrics — Tolerancia al riesgo] Tienes dos rutas de evacuacion. La A es segura pero lenta. La B es rapida pero hay un 35% de probabilidad de bloqueo por hielo.',
@@ -238,6 +242,7 @@ const TESTS: TestGame[] = [
     id: 'skills',
     title: 'Evaluacion 4: Skills (SHL)',
     description: 'Valida competencias aplicadas: planificacion, comunicacion asertiva y resolucion de problemas con impacto medible.',
+    visual: '/imagenes-fijas/region-2.jpg',
     questions: [
       {
         scene: '[SHL — Planificacion y organizacion] Tienes 4 horas para coordinar el cierre de dos zonas de riesgo con recursos limitados y sin margen de error.',
@@ -658,6 +663,11 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   key={game.id}
                   className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6"
                 >
+                  <img
+                    src={game.visual}
+                    alt={`Visual de ${game.title}`}
+                    className="mb-4 h-36 w-full rounded-lg object-cover"
+                  />
                   <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Evaluacion por escenarios</p>
                   <h2 className="text-2xl font-semibold">{game.title}</h2>
                   <p className="mt-3 text-slate-300">{game.description}</p>
@@ -707,7 +717,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
 
             <div className="mb-6 overflow-hidden rounded-xl border border-sky-900/60 bg-slate-950 p-4">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                <p className="text-sm text-slate-300">Escenario: Puerto metropolitano en inundacion</p>
+                <p className="text-sm text-slate-300">Escenario visual aplicado al test seleccionado</p>
                 <p className={`text-sm font-semibold ${state.toneClass}`}>{state.tone}</p>
               </div>
               {!finished ? (
@@ -726,62 +736,17 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   </div>
                 </div>
               ) : null}
-              <svg viewBox="0 0 900 280" className="h-52 w-full">
-                <defs>
-                  <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#0f172a" />
-                    <stop offset="100%" stopColor="#1e293b" />
-                  </linearGradient>
-                  <linearGradient id="water" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#0ea5e9" />
-                    <stop offset="100%" stopColor="#075985" />
-                  </linearGradient>
-                </defs>
-
-                <rect x="0" y="0" width="900" height="280" fill="url(#sky)" />
-
-                <rect
-                  x="0"
-                  y={280 - state.seaLevel * 3}
-                  width="900"
-                  height={state.seaLevel * 3}
-                  fill="url(#water)"
-                  opacity="0.85"
+              <div className="relative">
+                <img
+                  src={activeGame.visual}
+                  alt={`Visual del test ${activeGame.title}`}
+                  className="h-56 w-full rounded-lg object-cover"
                 />
-
-                <g opacity="0.85">
-                  <rect x="620" y="110" width="22" height={90 + state.cityDamage} fill="#334155" />
-                  <rect x="648" y="80" width="30" height={120 + state.cityDamage} fill="#475569" />
-                  <rect x="684" y="96" width="24" height={104 + state.cityDamage} fill="#334155" />
-                  <rect x="714" y="74" width="38" height={126 + state.cityDamage} fill="#1e293b" />
-                </g>
-
-                <g transform={`translate(180, 78) rotate(${state.boatTilt})`}>
-                  <polygon points="0,70 180,70 148,102 24,102" fill="#7c2d12" />
-                  <rect x="42" y="36" width="92" height="34" rx="4" fill="#cbd5e1" />
-                  <rect x="74" y="10" width="8" height="60" fill="#94a3b8" />
-                  <polygon points="82,12 132,35 82,35" fill="#e2e8f0" />
-                </g>
-
-                <g>
-                  <polygon
-                    points={`500,190 560,50 620,190`}
-                    fill="#bfdbfe"
-                    opacity="0.9"
-                    stroke="#7dd3fc"
-                    strokeWidth="2"
-                  />
-                  <line
-                    x1="560"
-                    y1="55"
-                    x2={560 + state.icebergCrack}
-                    y2="190"
-                    stroke="#0f172a"
-                    strokeWidth="3"
-                    opacity="0.8"
-                  />
-                </g>
-              </svg>
+                <div className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/20" />
+                <div className="absolute bottom-3 left-3 rounded-md bg-slate-950/70 px-3 py-2 text-xs text-slate-200">
+                  Nivel de criticidad: {state.tone}
+                </div>
+              </div>
             </div>
 
             {!finished ? (
