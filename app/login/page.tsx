@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
+import Image from 'next/image';
 
 import { authOptions } from '@/auth';
 
@@ -16,6 +17,14 @@ export default async function LoginPage() {
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-100 to-cyan-50 px-4 py-16">
       <div className="mx-auto grid max-w-5xl gap-8 rounded-2xl bg-white p-8 shadow-xl md:grid-cols-2 md:p-12">
         <section>
+          <Image
+            src="/logos-png/logo-hor.png"
+            alt="Nawaiam"
+            width={190}
+            height={52}
+            className="mb-5 h-9 w-auto"
+            priority
+          />
           <p className="mb-3 inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700">
             Acceso de Talento
           </p>

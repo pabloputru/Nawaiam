@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
@@ -673,6 +674,13 @@ export default function GamesClient({ userName }: GamesClientProps) {
         <header className="mb-10 rounded-2xl border border-slate-800 bg-slate-900 p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
+              <Image
+                src="/logos-png/logo-hor-b.png"
+                alt="Nawaiam"
+                width={200}
+                height={56}
+                className="mb-3 h-9 w-auto"
+              />
               <p className="text-sm uppercase tracking-widest text-sky-300">Assessment Center Nawaiam</p>
               <h1 className="text-3xl font-bold">Hola, {userName}</h1>
               <p className="mt-2 text-slate-300">
