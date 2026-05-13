@@ -19,11 +19,10 @@ export default function Header() {
           </Link>
         </div>
         <Link
-          href="https://store.nawaiam.com"
-          target="_blank"
+          href="/login"
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
         >
-          Acceder
+          Iniciar sesion
         </Link>
       </nav>
     </header>
