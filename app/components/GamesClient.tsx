@@ -363,7 +363,7 @@ type MissionEnding = {
   profile: DecisionProfile;
 };
 
-const CHAPTERS = ['Capitulo I: Alerta Temprana', 'Capitulo II: Ruptura del Iceberg', 'Capitulo III: Evacuacion Final'];
+const CHAPTERS = ['Fase I: Alerta Temprana', 'Fase II: Ruptura del Iceberg', 'Fase III: Coordinacion de Evacuacion'];
 
 function profileFromOptionIndex(optionIndex: number): DecisionProfile {
   if (optionIndex === 0) return 'proactivo';
@@ -400,7 +400,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
     if (ratio >= 0.8) {
       return {
         profile: dominantProfile,
-        title: 'Final: Comando de Rescate de Alto Impacto',
+        title: 'Resultado: Liderazgo de Respuesta de Alto Impacto',
         summary: 'Tomaste iniciativa con criterio y convertiste presion en ejecucion efectiva.',
         recommendation: 'Perfil recomendado para liderar operaciones de cambio acelerado.',
       };
@@ -408,7 +408,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
 
     return {
       profile: dominantProfile,
-      title: 'Final: Impulso de Respuesta Rapida',
+      title: 'Resultado: Impulso de Respuesta Rapida',
       summary: 'Movilizaste la operacion con iniciativa, aunque con margen para mejorar consistencia.',
       recommendation: 'Potenciar chequeos de calidad en decisiones de alta velocidad.',
     };
@@ -418,7 +418,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
     if (ratio >= 0.8) {
       return {
         profile: dominantProfile,
-        title: 'Final: Estratega de Crisis Sistemica',
+        title: 'Resultado: Estratega de Crisis Sistemica',
         summary: 'Priorizaste evidencia y coordinacion, sosteniendo estabilidad en un entorno extremo.',
         recommendation: 'Perfil ideal para disenar protocolos y conducir decisiones complejas.',
       };
@@ -426,7 +426,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
 
     return {
       profile: dominantProfile,
-      title: 'Final: Coordinador de Contingencias',
+      title: 'Resultado: Coordinador de Contingencias',
       summary: 'Tomaste decisiones cuidadosas y redujiste incertidumbre en momentos clave.',
       recommendation: 'Ganar mas ritmo operativo sin perder la calidad analitica.',
     };
@@ -435,7 +435,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
   if (ratio >= 0.8) {
     return {
       profile: dominantProfile,
-      title: 'Final: Respuesta Instintiva Efectiva',
+      title: 'Resultado: Respuesta Instintiva Efectiva',
       summary: 'Actuaste bajo tension con reflejos utiles y capacidad de recuperacion.',
       recommendation: 'Con estructura de planificacion, este perfil puede escalar fuerte.',
     };
@@ -443,7 +443,7 @@ function resolveMissionEnding(decisions: Decision[], score: number, maxScore: nu
 
   return {
     profile: dominantProfile,
-    title: 'Final: Zona de Riesgo Operativo',
+    title: 'Resultado: Zona de Riesgo Operativo',
     summary: 'Las decisiones tendieron a reaccion tardia y aumentaron la exposicion del operativo.',
     recommendation: 'Trabajar anticipacion, comunicacion y priorizacion bajo presion.',
   };
@@ -577,10 +577,10 @@ export default function GamesClient({ userName }: GamesClientProps) {
         <header className="mb-10 rounded-2xl border border-slate-800 bg-slate-900 p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-widest text-sky-300">Simulador Nawaiam</p>
+              <p className="text-sm uppercase tracking-widest text-sky-300">Assessment Center Nawaiam</p>
               <h1 className="text-3xl font-bold">Hola, {userName}</h1>
               <p className="mt-2 text-slate-300">
-                Evalua decisiones en una crisis de inundacion: cada accion elegida impacta el resultado del test.
+                Evaluacion conductual por escenarios: cada accion elegida impacta tu perfil de competencias.
               </p>
             </div>
             <div className="flex gap-3">
@@ -605,14 +605,14 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   key={game.id}
                   className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6"
                 >
-                  <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Simulacion activa</p>
+                  <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Evaluacion por escenarios</p>
                   <h2 className="text-2xl font-semibold">{game.title}</h2>
                   <p className="mt-3 text-slate-300">{game.description}</p>
                   <button
                     onClick={() => onStartGame(game.id)}
                     className="mt-6 rounded-lg bg-sky-500 px-4 py-2 font-semibold text-slate-900 transition hover:bg-sky-400"
                   >
-                    Iniciar mision
+                    Iniciar evaluacion
                   </button>
                 </article>
               ))}
@@ -620,7 +620,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
 
             <aside className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
               <h3 className="text-lg font-semibold">Ultimos resultados</h3>
-              <p className="mt-1 text-sm text-slate-400">Tus 12 ejecuciones mas recientes</p>
+              <p className="mt-1 text-sm text-slate-400">Tus 12 evaluaciones mas recientes</p>
 
               {history.length === 0 ? (
                 <p className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-3 text-sm text-slate-300">
@@ -648,7 +648,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-2xl font-semibold">{activeGame.title}</h2>
               <button onClick={onCloseGame} className="rounded-lg border border-slate-700 px-3 py-2 hover:bg-slate-800">
-                Salir de la mision
+                Salir de la evaluacion
               </button>
             </div>
 
@@ -662,7 +662,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   <div className="flex items-center justify-between text-xs uppercase tracking-wider text-sky-300">
                     <span>{CHAPTERS[chapterIndex]}</span>
                     <span>
-                      Progreso: {currentQuestionIndex + 1}/{activeGame.questions.length}
+                      Avance: {currentQuestionIndex + 1}/{activeGame.questions.length}
                     </span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-slate-800">
@@ -734,7 +734,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
             {!finished ? (
               <div>
                 <p className="mb-2 text-sm text-sky-300">
-                  Decision {currentQuestionIndex + 1} de {activeGame.questions.length}
+                  Escenario {currentQuestionIndex + 1} de {activeGame.questions.length}
                 </p>
                 <p className="mb-2 rounded-lg border border-slate-700 bg-slate-800/60 p-3 text-sm text-slate-200">
                   {activeGame.questions[currentQuestionIndex].scene}
@@ -755,9 +755,9 @@ export default function GamesClient({ userName }: GamesClientProps) {
               </div>
             ) : (
               <div className="rounded-xl border border-emerald-600 bg-emerald-900/30 p-6">
-                <p className="text-sm uppercase tracking-widest text-emerald-300">Resultado</p>
+                <p className="text-sm uppercase tracking-widest text-emerald-300">Reporte Conductual</p>
                 <h3 className="mt-2 text-2xl font-bold">
-                  {score}/{activeGame.questions.length * 2} efectividad de decisiones
+                  {score}/{activeGame.questions.length * 2} indice de efectividad en decisiones
                 </h3>
                 <p className="mt-3 text-emerald-200">{scoreLabel(score, activeGame.questions.length * 2)}</p>
                 <div className="mt-3 rounded-lg border border-emerald-700/60 bg-emerald-950/30 p-3">
@@ -771,10 +771,10 @@ export default function GamesClient({ userName }: GamesClientProps) {
                 <div className="mt-4 space-y-2">
                   {decisions.map((decision) => (
                     <div key={`${decision.step}-${decision.action}`} className="rounded-lg border border-emerald-700/60 bg-emerald-950/40 p-3">
-                      <p className="text-sm font-semibold text-emerald-100">Decision {decision.step}: {decision.action}</p>
+                      <p className="text-sm font-semibold text-emerald-100">Escenario {decision.step}: {decision.action}</p>
                       <p className="text-sm text-emerald-200/90">{decision.consequence}</p>
                       <p className="text-xs text-emerald-300">
-                        Impacto: +{decision.points} punto(s) · Estilo: {profileLabel(decision.profile)}
+                        Impacto: +{decision.points} punto(s) · Estilo conductual: {profileLabel(decision.profile)}
                       </p>
                     </div>
                   ))}
@@ -783,7 +783,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   onClick={onCloseGame}
                   className="mt-6 rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-slate-950 hover:bg-emerald-400"
                 >
-                  Elegir otra mision
+                  Elegir otra evaluacion
                 </button>
               </div>
             )}
