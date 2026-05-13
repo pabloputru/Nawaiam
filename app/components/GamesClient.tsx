@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
 
+type DecisionProfile = 'proactivo' | 'analitico' | 'reactivo';
+
 type Question = {
   scene: string;
   prompt: string;
@@ -351,7 +353,101 @@ type Decision = {
   action: string;
   consequence: string;
   points: number;
+  profile: DecisionProfile;
 };
+
+type MissionEnding = {
+  title: string;
+  summary: string;
+  recommendation: string;
+  profile: DecisionProfile;
+};
+
+const CHAPTERS = ['Capitulo I: Alerta Temprana', 'Capitulo II: Ruptura del Iceberg', 'Capitulo III: Evacuacion Final'];
+
+function profileFromOptionIndex(optionIndex: number): DecisionProfile {
+  if (optionIndex === 0) return 'proactivo';
+  if (optionIndex === 1) return 'analitico';
+  return 'reactivo';
+}
+
+function profileLabel(profile: DecisionProfile) {
+  if (profile === 'proactivo') return 'Proactivo';
+  if (profile === 'analitico') return 'Analitico';
+  return 'Reactivo';
+}
+
+function resolveMissionEnding(decisions: Decision[], score: number, maxScore: number): MissionEnding {
+  const ratio = maxScore === 0 ? 0 : score / maxScore;
+  const counters: Record<DecisionProfile, number> = {
+    proactivo: 0,
+    analitico: 0,
+    reactivo: 0,
+  };
+
+  for (const decision of decisions) {
+    counters[decision.profile] += 1;
+  }
+
+  const dominantProfile =
+    counters.proactivo >= counters.analitico && counters.proactivo >= counters.reactivo
+      ? 'proactivo'
+      : counters.analitico >= counters.reactivo
+        ? 'analitico'
+        : 'reactivo';
+
+  if (dominantProfile === 'proactivo') {
+    if (ratio >= 0.8) {
+      return {
+        profile: dominantProfile,
+        title: 'Final: Comando de Rescate de Alto Impacto',
+        summary: 'Tomaste iniciativa con criterio y convertiste presion en ejecucion efectiva.',
+        recommendation: 'Perfil recomendado para liderar operaciones de cambio acelerado.',
+      };
+    }
+
+    return {
+      profile: dominantProfile,
+      title: 'Final: Impulso de Respuesta Rapida',
+      summary: 'Movilizaste la operacion con iniciativa, aunque con margen para mejorar consistencia.',
+      recommendation: 'Potenciar chequeos de calidad en decisiones de alta velocidad.',
+    };
+  }
+
+  if (dominantProfile === 'analitico') {
+    if (ratio >= 0.8) {
+      return {
+        profile: dominantProfile,
+        title: 'Final: Estratega de Crisis Sistemica',
+        summary: 'Priorizaste evidencia y coordinacion, sosteniendo estabilidad en un entorno extremo.',
+        recommendation: 'Perfil ideal para disenar protocolos y conducir decisiones complejas.',
+      };
+    }
+
+    return {
+      profile: dominantProfile,
+      title: 'Final: Coordinador de Contingencias',
+      summary: 'Tomaste decisiones cuidadosas y redujiste incertidumbre en momentos clave.',
+      recommendation: 'Ganar mas ritmo operativo sin perder la calidad analitica.',
+    };
+  }
+
+  if (ratio >= 0.8) {
+    return {
+      profile: dominantProfile,
+      title: 'Final: Respuesta Instintiva Efectiva',
+      summary: 'Actuaste bajo tension con reflejos utiles y capacidad de recuperacion.',
+      recommendation: 'Con estructura de planificacion, este perfil puede escalar fuerte.',
+    };
+  }
+
+  return {
+    profile: dominantProfile,
+    title: 'Final: Zona de Riesgo Operativo',
+    summary: 'Las decisiones tendieron a reaccion tardia y aumentaron la exposicion del operativo.',
+    recommendation: 'Trabajar anticipacion, comunicacion y priorizacion bajo presion.',
+  };
+}
 
 type GamesClientProps = {
   userName: string;
@@ -444,6 +540,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
         action: selectedOption.action,
         consequence: selectedOption.consequence,
         points: selectedOption.points,
+        profile: profileFromOptionIndex(optionIndex),
       },
     ]);
 
@@ -471,6 +568,8 @@ export default function GamesClient({ userName }: GamesClientProps) {
 
   const maxScore = activeGame ? activeGame.questions.length * 2 : 0;
   const state = crisisState(score, maxScore);
+  const chapterIndex = Math.min(currentQuestionIndex, CHAPTERS.length - 1);
+  const ending = resolveMissionEnding(decisions, score, maxScore);
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
@@ -558,6 +657,22 @@ export default function GamesClient({ userName }: GamesClientProps) {
                 <p className="text-sm text-slate-300">Escenario: Puerto metropolitano en inundacion</p>
                 <p className={`text-sm font-semibold ${state.toneClass}`}>{state.tone}</p>
               </div>
+              {!finished ? (
+                <div className="mb-3">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-wider text-sky-300">
+                    <span>{CHAPTERS[chapterIndex]}</span>
+                    <span>
+                      Progreso: {currentQuestionIndex + 1}/{activeGame.questions.length}
+                    </span>
+                  </div>
+                  <div className="mt-2 h-2 rounded-full bg-slate-800">
+                    <div
+                      className="h-2 rounded-full bg-sky-400 transition-all"
+                      style={{ width: `${((currentQuestionIndex + 1) / activeGame.questions.length) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              ) : null}
               <svg viewBox="0 0 900 280" className="h-52 w-full">
                 <defs>
                   <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
@@ -645,13 +760,22 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   {score}/{activeGame.questions.length * 2} efectividad de decisiones
                 </h3>
                 <p className="mt-3 text-emerald-200">{scoreLabel(score, activeGame.questions.length * 2)}</p>
+                <div className="mt-3 rounded-lg border border-emerald-700/60 bg-emerald-950/30 p-3">
+                  <p className="text-sm font-semibold text-emerald-100">{ending.title}</p>
+                  <p className="text-sm text-emerald-200">{ending.summary}</p>
+                  <p className="mt-1 text-xs text-emerald-300">
+                    Perfil dominante: {profileLabel(ending.profile)} · {ending.recommendation}
+                  </p>
+                </div>
                 {isSaving ? <p className="mt-3 text-sm text-emerald-200">Guardando resultado...</p> : null}
                 <div className="mt-4 space-y-2">
                   {decisions.map((decision) => (
                     <div key={`${decision.step}-${decision.action}`} className="rounded-lg border border-emerald-700/60 bg-emerald-950/40 p-3">
                       <p className="text-sm font-semibold text-emerald-100">Decision {decision.step}: {decision.action}</p>
                       <p className="text-sm text-emerald-200/90">{decision.consequence}</p>
-                      <p className="text-xs text-emerald-300">Impacto: +{decision.points} punto(s)</p>
+                      <p className="text-xs text-emerald-300">
+                        Impacto: +{decision.points} punto(s) · Estilo: {profileLabel(decision.profile)}
+                      </p>
                     </div>
                   ))}
                 </div>
