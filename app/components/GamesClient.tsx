@@ -641,6 +641,32 @@ export default function GamesClient({ userName }: GamesClientProps) {
   const activeQuestion = activeGame ? activeGame.questions[currentQuestionIndex] : null;
   const activeVisual = activeQuestion?.visual ?? activeGame?.visual ?? '/imagenes-fijas/mapamundi-etapa1.jpg';
 
+  const [frontVisual, setFrontVisual] = useState(activeVisual);
+  const [backVisual, setBackVisual] = useState<string | null>(null);
+  const [isVisualTransitioning, setIsVisualTransitioning] = useState(false);
+
+  useEffect(() => {
+    if (activeVisual === frontVisual) return;
+
+    setBackVisual(frontVisual);
+    setFrontVisual(activeVisual);
+    setIsVisualTransitioning(false);
+
+    const frame = window.requestAnimationFrame(() => {
+      setIsVisualTransitioning(true);
+    });
+
+    const timeout = window.setTimeout(() => {
+      setBackVisual(null);
+      setIsVisualTransitioning(false);
+    }, 420);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
+  }, [activeVisual, frontVisual]);
+
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
       <div className="mx-auto max-w-6xl">
@@ -752,10 +778,21 @@ export default function GamesClient({ userName }: GamesClientProps) {
                 </div>
               ) : null}
               <div className="relative">
+                {backVisual ? (
+                  <img
+                    src={backVisual}
+                    alt={`Visual anterior del test ${activeGame.title}`}
+                    className={`absolute inset-0 h-56 w-full rounded-lg object-cover transition-opacity duration-500 ${
+                      isVisualTransitioning ? 'opacity-0' : 'opacity-100'
+                    }`}
+                  />
+                ) : null}
                 <img
-                  src={activeVisual}
+                  src={frontVisual}
                   alt={`Visual del test ${activeGame.title}`}
-                  className="h-56 w-full rounded-lg object-cover"
+                  className={`h-56 w-full rounded-lg object-cover transition-opacity duration-500 ${
+                    isVisualTransitioning || !backVisual ? 'opacity-100' : 'opacity-0'
+                  }`}
                 />
                 <div className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/20" />
                 <div className="absolute bottom-3 left-3 rounded-md bg-slate-950/70 px-3 py-2 text-xs text-slate-200">
