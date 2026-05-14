@@ -168,6 +168,12 @@ export default async function ProfilePage() {
               <p className="mt-2 text-slate-300">Resumen personal de evaluaciones y resultados acumulados.</p>
             </div>
             <div className="flex gap-3">
+              <a
+                href="/api/profile/pdf"
+                className="rounded-lg bg-sky-500 px-4 py-2 font-semibold text-slate-900 hover:bg-sky-400"
+              >
+                Descargar PDF
+              </a>
               <Link href="/games" className="rounded-lg border border-slate-700 px-4 py-2 hover:bg-slate-800">
                 Ir a evaluaciones
               </Link>
