@@ -2,6 +2,7 @@ import { createHash } from 'crypto';
 import { NextResponse } from 'next/server';
 
 import {
+  addMemoryUser,
   findValidMemoryResetToken,
   invalidateMemoryResetTokensByEmail,
   markMemoryResetTokenUsed,
@@ -17,6 +18,17 @@ type ResetPasswordBody = {
 
 function hashToken(token: string) {
   return createHash('sha256').update(token).digest('hex');
+}
+
+function profileFromEmail(email: string) {
+  const localPart = email.split('@')[0] || 'usuario';
+  const cleaned = localPart.replace(/[^a-zA-Z0-9._-]/g, ' ').trim();
+  const [firstName, ...rest] = cleaned.split(/[._\-\s]+/).filter(Boolean);
+
+  return {
+    firstName: firstName || 'Usuario',
+    lastName: rest.join(' '),
+  };
 }
 
 export async function POST(request: Request) {
@@ -74,10 +86,30 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'El link de recupero no es valido o expiro' }, { status: 400 });
     }
 
-    const updatedUser = updateMemoryUserPassword(memoryResetToken.email, hashPassword(password));
+    let updatedUser = updateMemoryUserPassword(memoryResetToken.email, hashPassword(password));
 
     if (!updatedUser) {
-      return NextResponse.json({ error: 'No se encontro el usuario del recupero' }, { status: 404 });
+      const profile = profileFromEmail(memoryResetToken.email);
+
+      try {
+        addMemoryUser({
+          email: memoryResetToken.email,
+          passwordHash: hashPassword(password),
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          birthDate: null,
+          position: null,
+          company: null,
+        });
+      } catch {
+        // If user was created concurrently, update should succeed on retry.
+      }
+
+      updatedUser = updateMemoryUserPassword(memoryResetToken.email, hashPassword(password));
+    }
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'No se pudo actualizar el usuario del recupero en contingencia' }, { status: 500 });
     }
 
     markMemoryResetTokenUsed(tokenHash);

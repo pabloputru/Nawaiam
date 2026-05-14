@@ -1,7 +1,8 @@
 import { createHash, randomBytes, randomUUID } from 'crypto';
 import { NextResponse } from 'next/server';
 
-import { addMemoryResetToken, findMemoryUserByEmail } from '@/lib/auth-store';
+import { addMemoryResetToken, addMemoryUser, findMemoryUserByEmail } from '@/lib/auth-store';
+import { hashPassword } from '@/lib/password';
 import { prisma } from '@/lib/prisma';
 
 type ForgotPasswordBody = {
@@ -106,6 +107,17 @@ async function sendResetEmail(email: string, resetUrl: string, requestId: string
   }
 }
 
+function profileFromEmail(email: string) {
+  const localPart = email.split('@')[0] || 'usuario';
+  const cleaned = localPart.replace(/[^a-zA-Z0-9._-]/g, ' ').trim();
+  const [firstName, ...rest] = cleaned.split(/[._\-\s]+/).filter(Boolean);
+
+  return {
+    firstName: firstName || 'Usuario',
+    lastName: rest.join(' '),
+  };
+}
+
 export async function POST(request: Request) {
   const requestId = randomUUID();
   const body = (await request.json()) as ForgotPasswordBody;
@@ -165,19 +177,39 @@ export async function POST(request: Request) {
       name: error instanceof Error ? error.name : 'Error',
     });
 
-    const memoryUser = findMemoryUserByEmail(email);
+    let memoryUser = findMemoryUserByEmail(email);
+    let provisionalUserCreated = false;
+
+    if (!memoryUser) {
+      const profile = profileFromEmail(email);
+
+      try {
+        memoryUser = addMemoryUser({
+          email,
+          passwordHash: hashPassword(randomBytes(24).toString('hex')),
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          birthDate: null,
+          position: null,
+          company: null,
+        });
+        provisionalUserCreated = true;
+      } catch {
+        memoryUser = findMemoryUserByEmail(email);
+      }
+    }
 
     if (!memoryUser) {
       return NextResponse.json({
-        ok: true,
-        message: 'Si el email existe, enviamos instrucciones para recuperar la contrasena.',
+        ok: false,
+        message: 'No se pudo preparar el recupero en modo contingencia.',
         delivery: {
-          status: 'in_app_link',
+          status: 'failed',
           provider: 'none',
-          reason: 'Email not found or masked response',
+          reason: 'Could not initialize temporary recovery user',
           requestId,
         } satisfies DeliveryInfo,
-      });
+      }, { status: 500 });
     }
 
     const token = randomBytes(32).toString('hex');
@@ -202,6 +234,7 @@ export async function POST(request: Request) {
           : 'Modo contingencia activo: email no enviado automaticamente. Usa el link de recupero y revisa el diagnostico.',
       resetUrl,
       delivery,
+      provisionalUserCreated,
       dbUnavailable: true,
       storage: 'memory',
     });
