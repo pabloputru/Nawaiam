@@ -26,10 +26,17 @@ export default async function ProfilePage() {
   const userEmail = session.user.email;
   const userName = session.user.name || userEmail.split('@')[0] || 'usuario';
 
-  const results = await prisma.gameResult.findMany({
-    where: { email: userEmail },
-    orderBy: { createdAt: 'desc' },
-  });
+  let results: Awaited<ReturnType<typeof prisma.gameResult.findMany>> = [];
+  let dbUnavailable = false;
+
+  try {
+    results = await prisma.gameResult.findMany({
+      where: { email: userEmail },
+      orderBy: { createdAt: 'desc' },
+    });
+  } catch {
+    dbUnavailable = true;
+  }
 
   const attempts = results.length;
   const totalScore = results.reduce((acc, result) => acc + result.score, 0);
@@ -121,6 +128,12 @@ export default async function ProfilePage() {
             </p>
           </article>
         </section>
+
+        {dbUnavailable ? (
+          <section className="rounded-xl border border-amber-700 bg-amber-900/20 p-4 text-sm text-amber-200">
+            No pudimos conectar con la base de datos en este momento. Tu perfil se muestra en modo limitado.
+          </section>
+        ) : null}
 
         <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
           <h2 className="text-xl font-semibold">Desglose por evaluacion</h2>

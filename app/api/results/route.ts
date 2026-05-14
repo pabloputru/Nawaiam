@@ -19,13 +19,18 @@ export async function GET() {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
-  const results = await prisma.gameResult.findMany({
-    where: { email: session.user.email },
-    orderBy: { createdAt: 'desc' },
-    take: 12,
-  });
+  try {
+    const results = await prisma.gameResult.findMany({
+      where: { email: session.user.email },
+      orderBy: { createdAt: 'desc' },
+      take: 12,
+    });
 
-  return NextResponse.json({ results });
+    return NextResponse.json({ results });
+  } catch {
+    // Keep UI functional if DB is temporarily unavailable.
+    return NextResponse.json({ results: [], dbUnavailable: true }, { status: 200 });
+  }
 }
 
 export async function POST(request: Request) {
@@ -43,17 +48,21 @@ export async function POST(request: Request) {
 
   const userName = session.user.name || session.user.email.split('@')[0] || 'usuario';
 
-  const created = await prisma.gameResult.create({
-    data: {
-      email: session.user.email,
-      userName,
-      gameId: body.gameId,
-      gameTitle: body.gameTitle,
-      score: body.score,
-      total: body.total,
-      label: body.label,
-    },
-  });
+  try {
+    const created = await prisma.gameResult.create({
+      data: {
+        email: session.user.email,
+        userName,
+        gameId: body.gameId,
+        gameTitle: body.gameTitle,
+        score: body.score,
+        total: body.total,
+        label: body.label,
+      },
+    });
 
-  return NextResponse.json({ result: created }, { status: 201 });
+    return NextResponse.json({ result: created }, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: 'Base de datos no disponible temporalmente' }, { status: 503 });
+  }
 }
