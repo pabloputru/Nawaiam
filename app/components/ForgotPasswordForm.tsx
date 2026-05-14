@@ -6,6 +6,13 @@ type ForgotResponse = {
   error?: string;
   message?: string;
   resetUrl?: string;
+  requestId?: string;
+  delivery?: {
+    status?: 'sent' | 'not_configured' | 'failed' | 'in_app_link';
+    provider?: 'smtp' | 'none';
+    reason?: string;
+    requestId?: string;
+  };
 };
 
 export default function ForgotPasswordForm() {
@@ -13,6 +20,7 @@ export default function ForgotPasswordForm() {
   const [message, setMessage] = useState('');
   const [resetUrl, setResetUrl] = useState('');
   const [error, setError] = useState('');
+  const [diagnostic, setDiagnostic] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -20,6 +28,7 @@ export default function ForgotPasswordForm() {
     setError('');
     setMessage('');
     setResetUrl('');
+    setDiagnostic('');
 
     if (!email) {
       setError('Ingresa tu email para continuar.');
@@ -45,6 +54,22 @@ export default function ForgotPasswordForm() {
 
     setMessage(data.message || 'Revisa tu correo para continuar.');
     setResetUrl(data.resetUrl || '');
+
+    if (data.delivery) {
+      const statusLabel =
+        data.delivery.status === 'sent'
+          ? 'Email enviado'
+          : data.delivery.status === 'not_configured'
+            ? 'SMTP no configurado'
+            : data.delivery.status === 'failed'
+              ? 'Fallo al enviar email'
+              : 'Entrega por link en app';
+
+      const requestId = data.delivery.requestId || data.requestId || 'n/a';
+      const reason = data.delivery.reason || 'Sin detalle';
+
+      setDiagnostic(`${statusLabel} · ${reason} · requestId: ${requestId}`);
+    }
   };
 
   return (
@@ -67,6 +92,12 @@ export default function ForgotPasswordForm() {
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
       {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
+
+      {diagnostic ? (
+        <p className="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-700">
+          Diagnostico de entrega: {diagnostic}
+        </p>
+      ) : null}
 
       {resetUrl ? (
         <p className="rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-800">

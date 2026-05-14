@@ -28,6 +28,15 @@ Configura estas variables en Vercel:
 - `DEMO_USER_EMAIL`
 - `DEMO_USER_PASSWORD`
 
+Para envio real de recupero de contrasena (SMTP), agrega tambien:
+
+- `SMTP_HOST`
+- `SMTP_PORT` (ej. `587` o `465`)
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_SECURE` (`true` para SSL directo, normalmente puerto 465)
+- `SMTP_FROM` (ej. `Nawaiam <no-reply@nawaiam.com>`)
+
 La app ya viene preparada para deploy con:
 
 - `vercel.json` con build command: `npm run vercel-build`
