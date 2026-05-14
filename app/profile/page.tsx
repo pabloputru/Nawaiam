@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { listMemoryResultsByEmail } from '@/lib/result-store';
 
 type SummaryByGame = {
   gameId: string;
@@ -36,6 +37,7 @@ export default async function ProfilePage() {
     });
   } catch {
     dbUnavailable = true;
+    results = listMemoryResultsByEmail(userEmail);
   }
 
   const attempts = results.length;
@@ -131,7 +133,7 @@ export default async function ProfilePage() {
 
         {dbUnavailable ? (
           <section className="rounded-xl border border-amber-700 bg-amber-900/20 p-4 text-sm text-amber-200">
-            No pudimos conectar con la base de datos en este momento. Tu perfil se muestra en modo limitado.
+            No pudimos conectar con la base de datos en este momento. Tu perfil se muestra en modo contingencia usando almacenamiento temporal.
           </section>
         ) : null}
 

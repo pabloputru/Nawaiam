@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { addMemoryResult, listMemoryResultsByEmail } from '@/lib/result-store';
 
 type CreateResultBody = {
   gameId?: string;
@@ -28,8 +29,8 @@ export async function GET() {
 
     return NextResponse.json({ results });
   } catch {
-    // Keep UI functional if DB is temporarily unavailable.
-    return NextResponse.json({ results: [], dbUnavailable: true }, { status: 200 });
+    const fallbackResults = listMemoryResultsByEmail(session.user.email, 12);
+    return NextResponse.json({ results: fallbackResults, dbUnavailable: true, storage: 'memory' }, { status: 200 });
   }
 }
 
@@ -63,6 +64,16 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ result: created }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: 'Base de datos no disponible temporalmente' }, { status: 503 });
+    const fallbackResult = addMemoryResult({
+      email: session.user.email,
+      userName,
+      gameId: body.gameId,
+      gameTitle: body.gameTitle,
+      score: body.score,
+      total: body.total,
+      label: body.label,
+    });
+
+    return NextResponse.json({ result: fallbackResult, dbUnavailable: true, storage: 'memory' }, { status: 201 });
   }
 }
