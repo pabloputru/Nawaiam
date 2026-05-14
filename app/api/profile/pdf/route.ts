@@ -126,7 +126,10 @@ async function resolveTemplatePdfPath() {
       continue;
     }
 
-    const preferred = pdfFiles.find((name) => name.toLowerCase().startsWith('1-proactivo'));
+    const preferred =
+      pdfFiles.find((name) => name.toLowerCase() === 'modelo informe.pdf') ||
+      pdfFiles.find((name) => name.toLowerCase() === 'model informe.pdf') ||
+      pdfFiles.find((name) => name.toLowerCase().startsWith('1-proactivo'));
     return path.join(dirPath, preferred || pdfFiles[0]);
   }
 
