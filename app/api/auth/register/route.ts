@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 
+import { addMemoryUser, findMemoryUserByEmail } from '@/lib/auth-store';
 import { hashPassword } from '@/lib/password';
 import { prisma } from '@/lib/prisma';
 
@@ -78,6 +79,39 @@ export async function POST(request: Request) {
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     console.error('Register API error', error);
-    return NextResponse.json({ error: 'No se pudo crear el usuario' }, { status: 500 });
+
+    const existingMemory = findMemoryUserByEmail(email);
+
+    if (existingMemory) {
+      return NextResponse.json({ error: 'Ya existe un usuario con ese email' }, { status: 409 });
+    }
+
+    try {
+      const memoryUser = addMemoryUser({
+        email,
+        passwordHash: hashPassword(password),
+        firstName,
+        lastName,
+        birthDate: parsedBirthDate,
+        position: position || null,
+        company: company || null,
+      });
+
+      return NextResponse.json(
+        {
+          user: {
+            id: memoryUser.id,
+            email: memoryUser.email,
+            firstName: memoryUser.firstName,
+            lastName: memoryUser.lastName,
+          },
+          dbUnavailable: true,
+          storage: 'memory',
+        },
+        { status: 201 }
+      );
+    } catch {
+      return NextResponse.json({ error: 'No se pudo crear el usuario' }, { status: 500 });
+    }
   }
 }

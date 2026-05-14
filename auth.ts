@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
+import { findMemoryUserByEmail } from '@/lib/auth-store';
 import { prisma } from '@/lib/prisma';
 import { verifyPassword } from '@/lib/password';
 
@@ -39,6 +40,16 @@ export const authOptions: NextAuthOptions = {
           }
         } catch (error) {
           console.error('Auth authorize DB error', error);
+        }
+
+        const memoryUser = findMemoryUserByEmail(email);
+
+        if (memoryUser && verifyPassword(password, memoryUser.passwordHash)) {
+          return {
+            id: memoryUser.id,
+            name: `${memoryUser.firstName} ${memoryUser.lastName}`.trim(),
+            email: memoryUser.email,
+          };
         }
 
         if (email !== DEMO_EMAIL || password !== DEMO_PASSWORD) {

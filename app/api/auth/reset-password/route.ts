@@ -1,6 +1,12 @@
 import { createHash } from 'crypto';
 import { NextResponse } from 'next/server';
 
+import {
+  findValidMemoryResetToken,
+  invalidateMemoryResetTokensByEmail,
+  markMemoryResetTokenUsed,
+  updateMemoryUserPassword,
+} from '@/lib/auth-store';
 import { hashPassword } from '@/lib/password';
 import { prisma } from '@/lib/prisma';
 
@@ -60,6 +66,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, message: 'Contrasena actualizada con exito' });
   } catch (error) {
     console.error('Reset password API error', error);
-    return NextResponse.json({ error: 'No se pudo actualizar la contrasena' }, { status: 500 });
+
+    const tokenHash = hashToken(token);
+    const memoryResetToken = findValidMemoryResetToken(tokenHash);
+
+    if (!memoryResetToken) {
+      return NextResponse.json({ error: 'El link de recupero no es valido o expiro' }, { status: 400 });
+    }
+
+    const updatedUser = updateMemoryUserPassword(memoryResetToken.email, hashPassword(password));
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: 'No se encontro el usuario del recupero' }, { status: 404 });
+    }
+
+    markMemoryResetTokenUsed(tokenHash);
+    invalidateMemoryResetTokensByEmail(memoryResetToken.email);
+
+    return NextResponse.json({
+      ok: true,
+      message: 'Contrasena actualizada con exito (modo contingencia)',
+      dbUnavailable: true,
+      storage: 'memory',
+    });
   }
 }

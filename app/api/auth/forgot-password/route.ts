@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'crypto';
 import { NextResponse } from 'next/server';
 
+import { addMemoryResetToken, findMemoryUserByEmail } from '@/lib/auth-store';
 import { prisma } from '@/lib/prisma';
 
 type ForgotPasswordBody = {
@@ -55,6 +56,34 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Forgot password API error', error);
-    return NextResponse.json({ error: 'No se pudo iniciar el recupero de contrasena' }, { status: 500 });
+
+    const memoryUser = findMemoryUserByEmail(email);
+
+    if (!memoryUser) {
+      return NextResponse.json({
+        ok: true,
+        message: 'Si el email existe, enviamos instrucciones para recuperar la contrasena.',
+      });
+    }
+
+    const token = randomBytes(32).toString('hex');
+    const tokenHash = hashToken(token);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 30);
+
+    addMemoryResetToken({
+      email,
+      tokenHash,
+      expiresAt,
+    });
+
+    const resetUrl = `${getBaseUrl()}/reset-password?token=${token}`;
+
+    return NextResponse.json({
+      ok: true,
+      message: 'Se genero un link de recupero en modo contingencia.',
+      resetUrl,
+      dbUnavailable: true,
+      storage: 'memory',
+    });
   }
 }

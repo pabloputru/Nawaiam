@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/auth';
+import { findMemoryUserByEmail } from '@/lib/auth-store';
 import { prisma } from '@/lib/prisma';
 import { listMemoryResultsByEmail } from '@/lib/result-store';
 
@@ -92,6 +93,18 @@ export default async function ProfilePage() {
     dbUnavailable = true;
     console.error('Profile database error', getErrorSummary(error));
     results = listMemoryResultsByEmail(userEmail);
+
+    const memoryUser = findMemoryUserByEmail(userEmail);
+
+    if (memoryUser) {
+      candidateProfile = {
+        firstName: memoryUser.firstName,
+        lastName: memoryUser.lastName,
+        birthDate: memoryUser.birthDate,
+        position: memoryUser.position,
+        company: memoryUser.company,
+      };
+    }
   }
 
   const fullName = `${candidateProfile.firstName} ${candidateProfile.lastName}`.trim() || fallbackName;
