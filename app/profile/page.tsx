@@ -17,6 +17,14 @@ type SummaryByGame = {
   latestLabel: string;
 };
 
+type CandidateProfile = {
+  firstName: string;
+  lastName: string;
+  birthDate: Date | null;
+  position: string | null;
+  company: string | null;
+};
+
 function getErrorSummary(error: unknown) {
   if (!error || typeof error !== 'object') {
     return { message: 'Unknown error' };
@@ -39,21 +47,54 @@ export default async function ProfilePage() {
   }
 
   const userEmail = session.user.email;
-  const userName = session.user.name || userEmail.split('@')[0] || 'usuario';
+  const fallbackName = session.user.name || userEmail.split('@')[0] || 'usuario';
+  let candidateProfile: CandidateProfile = {
+    firstName: fallbackName,
+    lastName: '',
+    birthDate: null,
+    position: null,
+    company: null,
+  };
 
   let results: Awaited<ReturnType<typeof prisma.gameResult.findMany>> = [];
   let dbUnavailable = false;
 
   try {
-    results = await prisma.gameResult.findMany({
-      where: { email: userEmail },
-      orderBy: { createdAt: 'desc' },
-    });
+    const [dbUser, dbResults] = await prisma.$transaction([
+      prisma.user.findUnique({
+        where: { email: userEmail },
+        select: {
+          firstName: true,
+          lastName: true,
+          birthDate: true,
+          position: true,
+          company: true,
+        },
+      }),
+      prisma.gameResult.findMany({
+        where: { email: userEmail },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    results = dbResults;
+
+    if (dbUser) {
+      candidateProfile = {
+        firstName: dbUser.firstName,
+        lastName: dbUser.lastName,
+        birthDate: dbUser.birthDate,
+        position: dbUser.position,
+        company: dbUser.company,
+      };
+    }
   } catch (error) {
     dbUnavailable = true;
     console.error('Profile database error', getErrorSummary(error));
     results = listMemoryResultsByEmail(userEmail);
   }
+
+  const fullName = `${candidateProfile.firstName} ${candidateProfile.lastName}`.trim() || fallbackName;
 
   const attempts = results.length;
   const totalScore = results.reduce((acc, result) => acc + result.score, 0);
@@ -110,7 +151,7 @@ export default async function ProfilePage() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-widest text-sky-300">Perfil del candidato</p>
-              <h1 className="text-3xl font-bold">{userName}</h1>
+              <h1 className="text-3xl font-bold">{fullName}</h1>
               <p className="mt-2 text-slate-300">Resumen personal de evaluaciones y resultados acumulados.</p>
             </div>
             <div className="flex gap-3">
@@ -151,6 +192,36 @@ export default async function ProfilePage() {
             No pudimos conectar con la base de datos en este momento. Tu perfil se muestra en modo contingencia usando almacenamiento temporal.
           </section>
         ) : null}
+
+        <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+          <h2 className="text-xl font-semibold">Ficha de la persona</h2>
+          <p className="mt-1 text-sm text-slate-400">Datos personales y laborales del candidato.</p>
+
+          <dl className="mt-4 grid gap-3 text-sm text-slate-200 sm:grid-cols-2">
+            <div className="rounded-lg border border-slate-700 bg-slate-800 p-3">
+              <dt className="text-xs uppercase tracking-widest text-slate-400">Nombre y apellido</dt>
+              <dd className="mt-1 font-semibold">{fullName}</dd>
+            </div>
+            <div className="rounded-lg border border-slate-700 bg-slate-800 p-3">
+              <dt className="text-xs uppercase tracking-widest text-slate-400">Email</dt>
+              <dd className="mt-1 font-semibold">{userEmail}</dd>
+            </div>
+            <div className="rounded-lg border border-slate-700 bg-slate-800 p-3">
+              <dt className="text-xs uppercase tracking-widest text-slate-400">Fecha de nacimiento</dt>
+              <dd className="mt-1 font-semibold">
+                {candidateProfile.birthDate ? new Date(candidateProfile.birthDate).toLocaleDateString('es-AR') : 'Sin datos'}
+              </dd>
+            </div>
+            <div className="rounded-lg border border-slate-700 bg-slate-800 p-3">
+              <dt className="text-xs uppercase tracking-widest text-slate-400">Puesto</dt>
+              <dd className="mt-1 font-semibold">{candidateProfile.position || 'Sin datos'}</dd>
+            </div>
+            <div className="rounded-lg border border-slate-700 bg-slate-800 p-3 sm:col-span-2">
+              <dt className="text-xs uppercase tracking-widest text-slate-400">Empresa</dt>
+              <dd className="mt-1 font-semibold">{candidateProfile.company || 'Sin datos'}</dd>
+            </div>
+          </dl>
+        </section>
 
         <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
           <h2 className="text-xl font-semibold">Desglose por evaluacion</h2>

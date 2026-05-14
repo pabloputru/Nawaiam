@@ -1,6 +1,9 @@
 import type { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
+import { prisma } from '@/lib/prisma';
+import { verifyPassword } from '@/lib/password';
+
 const DEMO_EMAIL = process.env.DEMO_USER_EMAIL || 'demo@nawaiam.com';
 const DEMO_PASSWORD = process.env.DEMO_USER_PASSWORD || 'demo1234';
 
@@ -19,6 +22,24 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const email = String(credentials?.email || '').trim().toLowerCase();
         const password = String(credentials?.password || '');
+
+        if (!email || !password) {
+          return null;
+        }
+
+        try {
+          const user = await prisma.user.findUnique({ where: { email } });
+
+          if (user && verifyPassword(password, user.passwordHash)) {
+            return {
+              id: user.id,
+              name: `${user.firstName} ${user.lastName}`.trim(),
+              email: user.email,
+            };
+          }
+        } catch (error) {
+          console.error('Auth authorize DB error', error);
+        }
 
         if (email !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
           return null;

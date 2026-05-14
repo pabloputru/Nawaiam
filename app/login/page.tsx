@@ -42,8 +42,9 @@ export default async function LoginPage() {
           </p>
           <ul className="mt-8 space-y-3 text-slate-700">
             <li>- Login real con Auth.js</li>
-            <li>- Proteccion de ruta para el area de juegos</li>
-            <li>- Credenciales demo listas para pruebas</li>
+            <li>- Registro de usuario con ficha personal</li>
+            <li>- Recupero de contrasena por link</li>
+            <li>- Proteccion de ruta para juegos y perfil</li>
           </ul>
         </section>
 

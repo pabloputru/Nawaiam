@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
@@ -32,7 +33,7 @@ export default function LoginForm() {
     setIsSubmitting(false);
 
     if (result?.error) {
-      setError('Credenciales invalidas. Prueba con demo@nawaiam.com / demo1234');
+      setError('Credenciales invalidas. Verifica tu email y contrasena.');
       return;
     }
 
@@ -81,6 +82,15 @@ export default function LoginForm() {
       >
         {isSubmitting ? 'Ingresando...' : 'Entrar a Juegos'}
       </button>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-sm">
+        <Link href="/register" className="font-semibold text-blue-700 hover:text-blue-800">
+          Crear usuario nuevo
+        </Link>
+        <Link href="/forgot-password" className="font-semibold text-slate-700 hover:text-slate-900">
+          Olvide mi contrasena
+        </Link>
+      </div>
     </form>
   );
 }
