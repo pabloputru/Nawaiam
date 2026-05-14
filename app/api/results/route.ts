@@ -13,6 +13,20 @@ type CreateResultBody = {
   label?: string;
 };
 
+function getErrorSummary(error: unknown) {
+  if (!error || typeof error !== 'object') {
+    return { message: 'Unknown error' };
+  }
+
+  const maybeError = error as { message?: string; code?: string; name?: string };
+
+  return {
+    name: maybeError.name || 'Error',
+    code: maybeError.code,
+    message: maybeError.message || 'No message',
+  };
+}
+
 export async function GET() {
   const session = await getServerSession(authOptions);
 
@@ -28,7 +42,8 @@ export async function GET() {
     });
 
     return NextResponse.json({ results });
-  } catch {
+  } catch (error) {
+    console.error('Results API GET database error', getErrorSummary(error));
     const fallbackResults = listMemoryResultsByEmail(session.user.email, 12);
     return NextResponse.json({ results: fallbackResults, dbUnavailable: true, storage: 'memory' }, { status: 200 });
   }
@@ -63,7 +78,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ result: created }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error('Results API POST database error', getErrorSummary(error));
     const fallbackResult = addMemoryResult({
       email: session.user.email,
       userName,

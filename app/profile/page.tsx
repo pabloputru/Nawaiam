@@ -17,6 +17,20 @@ type SummaryByGame = {
   latestLabel: string;
 };
 
+function getErrorSummary(error: unknown) {
+  if (!error || typeof error !== 'object') {
+    return { message: 'Unknown error' };
+  }
+
+  const maybeError = error as { message?: string; code?: string; name?: string };
+
+  return {
+    name: maybeError.name || 'Error',
+    code: maybeError.code,
+    message: maybeError.message || 'No message',
+  };
+}
+
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
@@ -35,8 +49,9 @@ export default async function ProfilePage() {
       where: { email: userEmail },
       orderBy: { createdAt: 'desc' },
     });
-  } catch {
+  } catch (error) {
     dbUnavailable = true;
+    console.error('Profile database error', getErrorSummary(error));
     results = listMemoryResultsByEmail(userEmail);
   }
 
