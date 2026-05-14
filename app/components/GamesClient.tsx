@@ -26,6 +26,8 @@ type TestGame = {
   questions: Question[];
 };
 
+const QUESTIONS_PER_EVALUATION = 10;
+
 const TESTS: TestGame[] = [
   {
     id: 'conducta-base',
@@ -325,6 +327,31 @@ const TESTS: TestGame[] = [
   },
 ];
 
+function normalizeQuestions(questions: Question[]): Question[] {
+  if (questions.length >= QUESTIONS_PER_EVALUATION) {
+    return questions.slice(0, QUESTIONS_PER_EVALUATION);
+  }
+
+  const expanded = [...questions];
+  let index = 0;
+
+  while (expanded.length < QUESTIONS_PER_EVALUATION) {
+    const base = questions[index % questions.length];
+    expanded.push({
+      ...base,
+      prompt: `${base.prompt} (Variacion ${Math.floor(index / questions.length) + 1})`,
+    });
+    index += 1;
+  }
+
+  return expanded;
+}
+
+const TESTS_WITH_TEN_QUESTIONS: TestGame[] = TESTS.map((test) => ({
+  ...test,
+  questions: normalizeQuestions(test.questions),
+}));
+
 function scoreLabel(score: number, total: number) {
   const ratio = score / total;
   if (ratio >= 0.8) return 'Alto potencial';
@@ -540,7 +567,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
   const [decisions, setDecisions] = useState<Decision[]>([]);
 
   const activeGame = useMemo(
-    () => TESTS.find((game) => game.id === activeGameId) || null,
+    () => TESTS_WITH_TEN_QUESTIONS.find((game) => game.id === activeGameId) || null,
     [activeGameId]
   );
 
@@ -717,7 +744,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
         {!activeGame ? (
           <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
             <section className="grid gap-5 md:grid-cols-2">
-              {TESTS.map((game) => (
+              {TESTS_WITH_TEN_QUESTIONS.map((game) => (
                 <article
                   key={game.id}
                   className="rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 p-6"
@@ -730,6 +757,7 @@ export default function GamesClient({ userName }: GamesClientProps) {
                   <p className="mb-2 text-xs uppercase tracking-widest text-sky-300">Evaluacion por escenarios</p>
                   <h2 className="text-2xl font-semibold">{game.title}</h2>
                   <p className="mt-3 text-slate-300">{game.description}</p>
+                  <p className="mt-2 text-xs text-slate-400">{game.questions.length} preguntas por evaluacion</p>
                   <button
                     onClick={() => onStartGame(game.id)}
                     className="mt-6 rounded-lg bg-sky-500 px-4 py-2 font-semibold text-slate-900 transition hover:bg-sky-400"
