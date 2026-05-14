@@ -26,8 +26,6 @@ type TestGame = {
   questions: Question[];
 };
 
-const QUESTIONS_PER_EVALUATION = 10;
-
 const TESTS: TestGame[] = [
   {
     id: 'conducta-base',
@@ -98,6 +96,160 @@ const TESTS: TestGame[] = [
             action: 'Justificar el cambio con factores externos sin asumir responsabilidad',
             consequence: 'Baja consistencia percibida: el equipo pierde referencia de comportamiento esperado.',
             points: 1,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
+        scene: '[Hogan — Autocontrol] Un proveedor clave cancela una entrega y un miembro del equipo propone culparlo en la reunion general.',
+        prompt: 'Como intervenis para sostener foco y conducta profesional?',
+        options: [
+          {
+            action: 'Frenar el juicio, separar hechos de opiniones y definir plan de mitigacion inmediato',
+            consequence: 'Autocontrol alto: encauzas la energia del equipo en accion efectiva.',
+            points: 2,
+          },
+          {
+            action: 'Permitir que se descargue la bronca y luego retomar el tema operativo',
+            consequence: 'Contiene tension parcial, pero se erosiona el clima y el foco.',
+            points: 1,
+          },
+          {
+            action: 'Respaldar publicamente la critica para mostrar firmeza',
+            consequence: 'Derailer de impulsividad: aumenta conflicto y baja colaboracion externa.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa2.jpg',
+        scene: '[Hogan — Humildad operativa] Un analista junior encuentra un error en tu estimacion frente a todo el equipo.',
+        prompt: 'Que haces en ese momento?',
+        options: [
+          {
+            action: 'Reconocer el hallazgo, validar el dato y ajustar la decision en vivo',
+            consequence: 'Humildad y credibilidad: priorizas precision por encima del ego.',
+            points: 2,
+          },
+          {
+            action: 'Pedir revisar luego para no frenar la reunion',
+            consequence: 'Preserva ritmo, pero deja una duda critica abierta.',
+            points: 1,
+          },
+          {
+            action: 'Desestimar la observacion por el rango del analista',
+            consequence: 'Derailer de arrogancia: desalienta aporte y empeora calidad futura.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa3.jpg',
+        scene: '[Hogan — Manejo del estres] Se superponen tres incidentes y recibes mensajes urgentes de clientes al mismo tiempo.',
+        prompt: 'Como administras tu respuesta inicial?',
+        options: [
+          {
+            action: 'Priorizar por impacto, asignar responsables y comunicar un marco de tiempos claro',
+            consequence: 'Gestion emocional y operativa consistente bajo sobrecarga.',
+            points: 2,
+          },
+          {
+            action: 'Atender primero al cliente mas insistente y luego ver el resto',
+            consequence: 'Resuelve un frente, pero deja riesgos criticos sin control.',
+            points: 1,
+          },
+          {
+            action: 'Responder en paralelo sin priorizar para mostrar rapidez',
+            consequence: 'Sobrerreaccion: baja calidad, mas errores y mayor tension interna.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
+        scene: '[Hogan — Predictibilidad] Tu equipo reporta criterios distintos para decidir escalaciones similares.',
+        prompt: 'Como corregis la inconsistencia conductual?',
+        options: [
+          {
+            action: 'Acordar reglas explicitas de decision y revisar casos testigo con todo el equipo',
+            consequence: 'Confiabilidad alta: mejoras coherencia y aprendizaje colectivo.',
+            points: 2,
+          },
+          {
+            action: 'Dar lineamientos generales y dejar que cada lider ajuste localmente',
+            consequence: 'Flexibilidad parcial, pero persisten diferencias de criterio.',
+            points: 1,
+          },
+          {
+            action: 'No intervenir porque cada contexto es distinto',
+            consequence: 'Ambiguedad sostenida: aumenta riesgo y baja trazabilidad.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa2.jpg',
+        scene: '[Hogan — Relacion con autoridad] Direccion te exige un recorte que compromete seguridad minima.',
+        prompt: 'Como negocias sin romper la relacion?',
+        options: [
+          {
+            action: 'Presentar impacto cuantificado, proponer alternativa viable y acordar criterio de excepcion',
+            consequence: 'Influencia madura: sostienes estandar y alineas a la autoridad.',
+            points: 2,
+          },
+          {
+            action: 'Aceptar el recorte y reforzar controles manuales con el equipo',
+            consequence: 'Cumples rapido, pero trasladas riesgo operativo al equipo.',
+            points: 1,
+          },
+          {
+            action: 'Rechazar la orden sin proponer alternativa',
+            consequence: 'Confrontacion rigida: debilita colaboracion y capacidad de influencia.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa3.jpg',
+        scene: '[Hogan — Recuperacion post-error] Una decision tuya genero retraso y ya fue visible para clientes internos.',
+        prompt: 'Cual es tu siguiente paso?',
+        options: [
+          {
+            action: 'Asumir responsabilidad, corregir con plan de recuperacion y compartir aprendizaje',
+            consequence: 'Madurez conductual alta: conviertes error en mejora del sistema.',
+            points: 2,
+          },
+          {
+            action: 'Corregir en silencio para evitar ruido reputacional',
+            consequence: 'Reduce exposicion inmediata, pero limita aprendizaje organizacional.',
+            points: 1,
+          },
+          {
+            action: 'Atribuir el resultado a factores externos y seguir',
+            consequence: 'Baja accountability: aumenta probabilidad de repeticion.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/mapamundi-etapa1.jpg',
+        scene: '[Hogan — Resiliencia] Tras una semana de incidentes, el equipo muestra cinismo y baja energia para un nuevo hito critico.',
+        prompt: 'Como reactivas la resiliencia colectiva?',
+        options: [
+          {
+            action: 'Marcar objetivos alcanzables de corto plazo, celebrar progreso y sostener ritmos realistas',
+            consequence: 'Resiliencia funcional: recuperas confianza sin negar la exigencia.',
+            points: 2,
+          },
+          {
+            action: 'Pedir compromiso total recordando la importancia del proyecto',
+            consequence: 'Motiva parcialmente, pero no aborda el desgaste real.',
+            points: 1,
+          },
+          {
+            action: 'Aplazar decisiones clave hasta que el clima mejore solo',
+            consequence: 'Evitacion: profundiza la perdida de traccion del equipo.',
+            points: 0,
           },
         ],
       },
@@ -175,6 +327,160 @@ const TESTS: TestGame[] = [
           },
         ],
       },
+      {
+        visual: '/imagenes-fijas/ciudad-1.jpg',
+        scene: '[Gallup — Claridad de expectativas] Dos equipos comparten objetivo, pero cada uno interpreta diferente el entregable final.',
+        prompt: 'Como elevas compromiso desde claridad?',
+        options: [
+          {
+            action: 'Definir resultado esperado con ejemplos concretos y acuerdos de calidad compartidos',
+            consequence: 'Compromiso sube al reducir ambiguedad y fricciones.',
+            points: 2,
+          },
+          {
+            action: 'Dejar que cada equipo avance y alinear al final del ciclo',
+            consequence: 'Autonomia alta, pero riesgo de retrabajo significativo.',
+            points: 1,
+          },
+          {
+            action: 'Imponer formato unico sin espacio para preguntas',
+            consequence: 'Cumplimiento superficial y menor apropiacion del objetivo.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-2.jpg',
+        scene: '[Gallup — Feedback frecuente] Un colaborador de alto potencial bajo su performance en las ultimas semanas.',
+        prompt: 'Como abordas la conversacion para recuperar su energia?',
+        options: [
+          {
+            action: 'Dar feedback especifico sobre fortalezas y co-disenar un plan breve con seguimiento semanal',
+            consequence: 'Feedback movilizador: recupera direccion y motivacion.',
+            points: 2,
+          },
+          {
+            action: 'Esperar el cierre mensual para evaluar si mejora solo',
+            consequence: 'Demora en intervencion: se consolida la caida de engagement.',
+            points: 1,
+          },
+          {
+            action: 'Compararlo con otro colaborador para presionarlo',
+            consequence: 'Desmotivacion y amenaza al sentido de pertenencia.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-3.jpg',
+        scene: '[Gallup — Sentido de proposito] El equipo tecnico cumple tareas, pero desconectado del impacto en usuarios.',
+        prompt: 'Que accion haces primero?',
+        options: [
+          {
+            action: 'Conectar cada entregable con impacto de negocio y testimonios de usuarios reales',
+            consequence: 'Proposito visible: aumenta orgullo y persistencia.',
+            points: 2,
+          },
+          {
+            action: 'Mantener foco solo en KPIs operativos para no dispersar',
+            consequence: 'Controlas ejecucion, pero no reactivas sentido.',
+            points: 1,
+          },
+          {
+            action: 'Subir objetivos de volumen para forzar intensidad',
+            consequence: 'Mas actividad, menos compromiso autentico.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-1.jpg',
+        scene: '[Gallup — Reconocimiento efectivo] En una semana critica, varios aportes clave pasaron desapercibidos.',
+        prompt: 'Como usas reconocimiento para sostener engagement?',
+        options: [
+          {
+            action: 'Reconocer contribuciones puntuales en tiempo real y explicar por que importaron',
+            consequence: 'Refuerzo positivo de alto valor: replica conductas efectivas.',
+            points: 2,
+          },
+          {
+            action: 'Hacer un agradecimiento general al final de mes',
+            consequence: 'Intencion positiva, impacto motivacional limitado.',
+            points: 1,
+          },
+          {
+            action: 'Evitar reconocimiento para no generar diferencias',
+            consequence: 'Se diluye merito y baja energia de aporte extra.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-2.jpg',
+        scene: '[Gallup — Autonomia guiada] El equipo pide libertad total para reorganizar prioridades en medio de un pico de demanda.',
+        prompt: 'Como equilibras autonomia y direccion?',
+        options: [
+          {
+            action: 'Acordar margenes de autonomia, metricas y checkpoints cortos de alineacion',
+            consequence: 'Autonomia responsable: combina ownership con foco comun.',
+            points: 2,
+          },
+          {
+            action: 'Dar libertad total y revisar al final del sprint',
+            consequence: 'Empodera, pero eleva riesgo de desalineacion.',
+            points: 1,
+          },
+          {
+            action: 'Centralizar todas las decisiones durante la crisis',
+            consequence: 'Control excesivo: baja iniciativa y compromiso.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-3.jpg',
+        scene: '[Gallup — Desarrollo de talentos] Tenes presupuesto para entrenar solo a una parte del equipo.',
+        prompt: 'Como decides para proteger motivacion colectiva?',
+        options: [
+          {
+            action: 'Definir criterios transparentes, rotacion por etapas y transferencia interna de aprendizaje',
+            consequence: 'Percepcion de justicia alta y crecimiento distribuido.',
+            points: 2,
+          },
+          {
+            action: 'Capacitar a quienes hoy tienen mejor rendimiento',
+            consequence: 'Potencia elite, pero puede ampliar brechas internas.',
+            points: 1,
+          },
+          {
+            action: 'Elegir discrecionalmente sin explicar motivos',
+            consequence: 'Desconfianza y desenganche por inequidad percibida.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/ciudad-1.jpg',
+        scene: '[Gallup — Bienestar y rendimiento] Se incrementan ausencias y errores menores tras varias semanas intensas.',
+        prompt: 'Que medida tomas primero?',
+        options: [
+          {
+            action: 'Ajustar cargas, reforzar prioridades criticas y habilitar espacios breves de recuperacion',
+            consequence: 'Prevencion activa de fatiga: mejora calidad y continuidad.',
+            points: 2,
+          },
+          {
+            action: 'Mantener el plan y ofrecer apoyo individual a demanda',
+            consequence: 'Respuesta reactiva, impacto parcial sobre el problema.',
+            points: 1,
+          },
+          {
+            action: 'Elevar exigencia para compensar ausencias',
+            consequence: 'Espiral de desgaste y caida de compromiso.',
+            points: 0,
+          },
+        ],
+      },
     ],
   },
   {
@@ -245,6 +551,160 @@ const TESTS: TestGame[] = [
           {
             action: 'Elegir la senal que confirma lo que ya planeabas hacer',
             consequence: 'Sesgo de confirmacion activo: decision influida por creencia previa, no por evidencia.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/region-1-etapa1.jpg',
+        scene: '[Pymetrics — Flexibilidad cognitiva] Una regla que funcionaba deja de servir por cambio de contexto regulatorio.',
+        prompt: 'Como adaptas tu modelo mental?',
+        options: [
+          {
+            action: 'Reformular hipotesis, probar un ajuste acotado y medir efecto en corto plazo',
+            consequence: 'Alta flexibilidad: cambias con evidencia, sin perder control.',
+            points: 2,
+          },
+          {
+            action: 'Mantener la regla hasta tener validacion completa externa',
+            consequence: 'Conservador, pero puede llegar tarde al nuevo contexto.',
+            points: 1,
+          },
+          {
+            action: 'Cambiar todo el esquema de golpe sin pruebas',
+            consequence: 'Sobreajuste riesgoso: aumenta volatilidad de resultados.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/region-2.jpg',
+        scene: '[Pymetrics — Control inhibitorio] Detectas una oportunidad llamativa pero fuera del objetivo critico del dia.',
+        prompt: 'Que decision tomas?',
+        options: [
+          {
+            action: 'Registrar la oportunidad y mantener foco en el objetivo critico vigente',
+            consequence: 'Control inhibitorio alto: priorizas impacto real sobre novedad.',
+            points: 2,
+          },
+          {
+            action: 'Dedicar una parte relevante del tiempo para explorarla ahora',
+            consequence: 'Curiosidad util, con costo sobre entregables urgentes.',
+            points: 1,
+          },
+          {
+            action: 'Reorientar al equipo completo hacia esa oportunidad',
+            consequence: 'Impulsividad estrategica: desalineacion y riesgo operativo.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/migrantes.jpg',
+        scene: '[Pymetrics — Memoria de trabajo] Tienes cinco variables criticas cambiando minuto a minuto durante una evacuacion.',
+        prompt: 'Como sostienes calidad de decision?',
+        options: [
+          {
+            action: 'Externalizar variables en tablero simple con umbrales de accion y responsables claros',
+            consequence: 'Memoria de trabajo apoyada por sistema: menos error bajo carga.',
+            points: 2,
+          },
+          {
+            action: 'Confiar en seguimiento mental personal por experiencia previa',
+            consequence: 'Puede funcionar en corto, pero aumenta riesgo de omision.',
+            points: 1,
+          },
+          {
+            action: 'Delegar todo sin marco comun de seguimiento',
+            consequence: 'Perdida de integracion: decisiones descoordinadas.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/region-1-etapa1.jpg',
+        scene: '[Pymetrics — Evaluacion probabilistica] Dos escenarios compiten: uno de alto impacto y baja probabilidad, otro de impacto medio y alta probabilidad.',
+        prompt: 'Como priorizas recursos?',
+        options: [
+          {
+            action: 'Distribuir recursos segun riesgo esperado e incluir gatillos para reequilibrar rapido',
+            consequence: 'Razonamiento probabilistico robusto y adaptable.',
+            points: 2,
+          },
+          {
+            action: 'Priorizar solo el escenario de mayor impacto potencial',
+            consequence: 'Cobertura de extremo, con posible descuido del riesgo mas probable.',
+            points: 1,
+          },
+          {
+            action: 'Repartir recursos por partes iguales sin analisis',
+            consequence: 'Neutralidad aparente: baja eficiencia de asignacion.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/region-2.jpg',
+        scene: '[Pymetrics — Deteccion de sesgos] Tu primera hipotesis fue bien recibida y el equipo deja de cuestionarla.',
+        prompt: 'Que haces para evitar sesgo de confirmacion grupal?',
+        options: [
+          {
+            action: 'Asignar rol de abogado del diablo y contrastar con evidencia que pueda refutar la hipotesis',
+            consequence: 'Antisesgo activo: mejoras calidad y resiliencia de decision.',
+            points: 2,
+          },
+          {
+            action: 'Mantener hipotesis base y revisar solo indicadores que la apoyen',
+            consequence: 'Rapidez inicial, pero mayor riesgo de ceguera selectiva.',
+            points: 1,
+          },
+          {
+            action: 'Cerrar debate para ganar tiempo operativo',
+            consequence: 'Supresion de discrepancia: aumenta probabilidad de error critico.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/migrantes.jpg',
+        scene: '[Pymetrics — Aprendizaje por retroalimentacion] El ultimo experimento mejoro un indicador y empeoro otro clave.',
+        prompt: 'Como decides el siguiente experimento?',
+        options: [
+          {
+            action: 'Aislar variable causal probable y probar ajuste con criterio de exito multivariable',
+            consequence: 'Aprendizaje de calidad: iteras con mayor precision.',
+            points: 2,
+          },
+          {
+            action: 'Repetir el experimento para confirmar tendencia general',
+            consequence: 'Validacion util, aunque lenta frente a urgencia.',
+            points: 1,
+          },
+          {
+            action: 'Descartar la linea completa por resultados mixtos',
+            consequence: 'Perdida de aprendizaje acumulado y eficiencia.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/region-1-etapa1.jpg',
+        scene: '[Pymetrics — Toma de decisiones secuencial] Debes decidir ahora con informacion parcial y podras corregir en 15 minutos.',
+        prompt: 'Cual es la mejor estrategia de decision?',
+        options: [
+          {
+            action: 'Tomar una decision reversible de bajo costo y preparar criterio explicito de ajuste',
+            consequence: 'Secuenciacion inteligente: avanzas sin comprometer irreversiblemente.',
+            points: 2,
+          },
+          {
+            action: 'Esperar la informacion completa para evitar error',
+            consequence: 'Reduce incertidumbre, pero puede perder ventana de accion.',
+            points: 1,
+          },
+          {
+            action: 'Tomar decision irreversible inmediata para mostrar conviccion',
+            consequence: 'Rigidez prematura: sube costo ante nueva evidencia.',
             points: 0,
           },
         ],
@@ -323,34 +783,165 @@ const TESTS: TestGame[] = [
           },
         ],
       },
+      {
+        visual: '/imagenes-fijas/zocalo-sobre-ciudad.jpg',
+        scene: '[SHL — Toma de decisiones] Debes elegir entre cumplir fecha con riesgo moderado o replanificar 48 horas para bajar riesgo fuerte.',
+        prompt: 'Como decides y comunicas?',
+        options: [
+          {
+            action: 'Comparar impacto, acordar criterio de decision con stakeholders y comunicar trade-offs explicitamente',
+            consequence: 'Decision profesional: equilibrio entre plazo, riesgo y transparencia.',
+            points: 2,
+          },
+          {
+            action: 'Cumplir fecha y compensar riesgos durante la ejecucion',
+            consequence: 'Preserva compromiso temporal, con tension operativa adicional.',
+            points: 1,
+          },
+          {
+            action: 'Replanificar unilateralmente sin alinear a involucrados',
+            consequence: 'Aumenta friccion y debilita gobernanza del proyecto.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/intro-barco-2a.png',
+        scene: '[SHL — Priorizacion] Llegan 12 requerimientos urgentes y solo puedes ejecutar 4 esta semana.',
+        prompt: 'Que metodo aplicas?',
+        options: [
+          {
+            action: 'Priorizar por impacto/urgencia/dependencias y publicar backlog razonado',
+            consequence: 'Priorizacion objetiva: alinea expectativas y foco operativo.',
+            points: 2,
+          },
+          {
+            action: 'Atender primero lo solicitado por las areas con mayor jerarquia',
+            consequence: 'Orden politico rapido, calidad estrategica variable.',
+            points: 1,
+          },
+          {
+            action: 'Tomar los primeros 4 pedidos que llegaron',
+            consequence: 'Metodo simple pero ciego al impacto real.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/intro-barco-1a.png',
+        scene: '[SHL — Colaboracion] Dos lideres funcionales sostienen criterios opuestos para resolver el mismo riesgo.',
+        prompt: 'Como destrabas el conflicto?',
+        options: [
+          {
+            action: 'Alinear objetivo comun, explicitar criterios y facilitar acuerdo basado en evidencia',
+            consequence: 'Colaboracion efectiva con decision compartida y sostenible.',
+            points: 2,
+          },
+          {
+            action: 'Elegir un criterio por autoridad para avanzar rapido',
+            consequence: 'Avance inmediato, con menor adhesion del equipo contrario.',
+            points: 1,
+          },
+          {
+            action: 'Evitar intervenir para no exponerte al conflicto',
+            consequence: 'Bloqueo persistente y deterioro de resultados.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/zocalo-sobre-ciudad.jpg',
+        scene: '[SHL — Comunicacion escrita] Debes enviar una actualizacion critica al directorio en menos de 20 minutos.',
+        prompt: 'Que estructura usas?',
+        options: [
+          {
+            action: 'Resumen ejecutivo, riesgos clave, decisiones requeridas y proximo hito con fecha',
+            consequence: 'Comunicacion ejecutiva clara y accionable.',
+            points: 2,
+          },
+          {
+            action: 'Detalle tecnico completo para evitar preguntas posteriores',
+            consequence: 'Rigor alto, pero baja legibilidad para nivel directivo.',
+            points: 1,
+          },
+          {
+            action: 'Mensaje breve sin contexto para ganar velocidad',
+            consequence: 'Ambiguedad: multiplica preguntas y retrasa decisiones.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/intro-barco-2a.png',
+        scene: '[SHL — Orientacion al cliente] El cliente pide un cambio tardio que afecta alcance y costos.',
+        prompt: 'Como respondes?',
+        options: [
+          {
+            action: 'Evaluar impacto formalmente, ofrecer opciones y acordar decision informada',
+            consequence: 'Gestion profesional de expectativas y relacion de largo plazo.',
+            points: 2,
+          },
+          {
+            action: 'Aceptar cambio para cuidar relacion y ajustar internamente',
+            consequence: 'Cercania con cliente, pero riesgo de sobrecarga interna.',
+            points: 1,
+          },
+          {
+            action: 'Rechazar cambio por fuera de alcance sin alternativa',
+            consequence: 'Proteges alcance, pero deterioras experiencia del cliente.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/intro-barco-1a.png',
+        scene: '[SHL — Monitoreo] Un tablero muestra tendencia negativa leve en 3 indicadores clave.',
+        prompt: 'Que haces primero?',
+        options: [
+          {
+            action: 'Abrir analisis causal rapido, definir acciones correctivas y punto de control en 24h',
+            consequence: 'Monitoreo activo: corriges antes de que escale.',
+            points: 2,
+          },
+          {
+            action: 'Esperar una semana para confirmar si es ruido estadistico',
+            consequence: 'Evita sobrerreaccion, pero puede perder ventana de prevencion.',
+            points: 1,
+          },
+          {
+            action: 'Ocultar indicadores para no alarmar al equipo',
+            consequence: 'Falsa calma: incremento de riesgo operativo.',
+            points: 0,
+          },
+        ],
+      },
+      {
+        visual: '/imagenes-fijas/zocalo-sobre-ciudad.jpg',
+        scene: '[SHL — Accountability] Un frente critico quedo sin responsable claro y se perdio un hito.',
+        prompt: 'Como corriges el sistema de trabajo?',
+        options: [
+          {
+            action: 'Asignar owner unico por frente, definir criterios de escalacion y cerrar seguimiento semanal',
+            consequence: 'Accountability robusta: mas control y menos zonas grises.',
+            points: 2,
+          },
+          {
+            action: 'Reforzar pedido general de compromiso al equipo',
+            consequence: 'Mensaje positivo, pero sin cambio estructural suficiente.',
+            points: 1,
+          },
+          {
+            action: 'Buscar culpable y sancionar para evitar repeticion',
+            consequence: 'Clima defensivo y menor colaboracion transversal.',
+            points: 0,
+          },
+        ],
+      },
     ],
   },
 ];
 
-function normalizeQuestions(questions: Question[]): Question[] {
-  if (questions.length >= QUESTIONS_PER_EVALUATION) {
-    return questions.slice(0, QUESTIONS_PER_EVALUATION);
-  }
-
-  const expanded = [...questions];
-  let index = 0;
-
-  while (expanded.length < QUESTIONS_PER_EVALUATION) {
-    const base = questions[index % questions.length];
-    expanded.push({
-      ...base,
-      prompt: `${base.prompt} (Variacion ${Math.floor(index / questions.length) + 1})`,
-    });
-    index += 1;
-  }
-
-  return expanded;
-}
-
-const TESTS_WITH_TEN_QUESTIONS: TestGame[] = TESTS.map((test) => ({
-  ...test,
-  questions: normalizeQuestions(test.questions),
-}));
+const TESTS_WITH_TEN_QUESTIONS: TestGame[] = TESTS;
 
 function scoreLabel(score: number, total: number) {
   const ratio = score / total;
