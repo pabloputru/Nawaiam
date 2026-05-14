@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises';
+import { readFile, readdir } from 'fs/promises';
 import path from 'path';
 
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
@@ -102,6 +102,35 @@ function sanitizeFileName(input: string) {
     .replace(/[^a-z0-9\-]/g, '')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
+}
+
+async function resolveTemplatePdfPath() {
+  const candidateDirs = [
+    path.join(process.cwd(), 'public', 'logos-png'),
+    path.join(process.cwd(), 'public', 'Logos PNG'),
+    path.join(process.cwd(), 'public', 'logos png'),
+  ];
+
+  for (const dirPath of candidateDirs) {
+    let fileNames: string[] = [];
+
+    try {
+      fileNames = await readdir(dirPath);
+    } catch {
+      continue;
+    }
+
+    const pdfFiles = fileNames.filter((name) => name.toLowerCase().endsWith('.pdf'));
+
+    if (pdfFiles.length === 0) {
+      continue;
+    }
+
+    const preferred = pdfFiles.find((name) => name.toLowerCase().startsWith('1-proactivo'));
+    return path.join(dirPath, preferred || pdfFiles[0]);
+  }
+
+  return null;
 }
 
 export async function GET() {
@@ -218,13 +247,59 @@ export async function GET() {
   const regularFont = await pdf.embedFont(StandardFonts.Helvetica);
   const boldFont = await pdf.embedFont(StandardFonts.HelveticaBold);
 
-  const pageSize: [number, number] = [595.28, 841.89];
+  const defaultPageSize: [number, number] = [595.28, 841.89];
+
+  let templateName: string | null = null;
+  let templateEmbeddedPage: Awaited<ReturnType<typeof pdf.embedPage>> | null = null;
+  let pageSize: [number, number] = defaultPageSize;
+
+  try {
+    const templatePath = await resolveTemplatePdfPath();
+
+    if (templatePath) {
+      const templateBytes = await readFile(templatePath);
+      const templateDoc = await PDFDocument.load(templateBytes);
+      const templatePage = templateDoc.getPage(0);
+
+      templateEmbeddedPage = await pdf.embedPage(templatePage);
+      pageSize = [templatePage.getWidth(), templatePage.getHeight()];
+      templateName = path.basename(templatePath);
+    }
+  } catch (error) {
+    console.error('Profile PDF template loading error', getErrorSummary(error));
+  }
+
   const marginX = 42;
   const topMargin = 46;
   const bottomMargin = 42;
   const contentWidth = pageSize[0] - marginX * 2;
 
-  let page = pdf.addPage(pageSize);
+  const addPage = () => {
+    const nextPage = pdf.addPage(pageSize);
+
+    if (templateEmbeddedPage) {
+      nextPage.drawPage(templateEmbeddedPage, {
+        x: 0,
+        y: 0,
+        width: pageSize[0],
+        height: pageSize[1],
+      });
+
+      // Keep text readable while respecting template look.
+      nextPage.drawRectangle({
+        x: 24,
+        y: 24,
+        width: pageSize[0] - 48,
+        height: pageSize[1] - 48,
+        color: rgb(1, 1, 1),
+        opacity: 0.78,
+      });
+    }
+
+    return nextPage;
+  };
+
+  let page = addPage();
   let y = pageSize[1] - topMargin;
 
   const ensureSpace = (heightNeeded: number) => {
@@ -232,7 +307,7 @@ export async function GET() {
       return;
     }
 
-    page = pdf.addPage(pageSize);
+    page = addPage();
     y = pageSize[1] - topMargin;
   };
 
@@ -269,24 +344,29 @@ export async function GET() {
     }
   };
 
-  try {
-    const logoPath = path.join(process.cwd(), 'public', 'logos-png', 'logo-hor.png');
-    const logoBytes = await readFile(logoPath);
-    const logoImage = await pdf.embedPng(logoBytes);
-    const targetWidth = 150;
-    const scale = targetWidth / logoImage.width;
-    const targetHeight = logoImage.height * scale;
+  if (!templateEmbeddedPage) {
+    try {
+      const logoPath = path.join(process.cwd(), 'public', 'logos-png', 'logo-hor.png');
+      const logoBytes = await readFile(logoPath);
+      const logoImage = await pdf.embedPng(logoBytes);
+      const targetWidth = 150;
+      const scale = targetWidth / logoImage.width;
+      const targetHeight = logoImage.height * scale;
 
-    page.drawImage(logoImage, {
-      x: marginX,
-      y: y - targetHeight,
-      width: targetWidth,
-      height: targetHeight,
-    });
+      page.drawImage(logoImage, {
+        x: marginX,
+        y: y - targetHeight,
+        width: targetWidth,
+        height: targetHeight,
+      });
 
-    y -= targetHeight + 10;
-  } catch {
-    drawTextLine('Nawaiam', { size: 18, bold: true, color: [0.05, 0.12, 0.25] });
+      y -= targetHeight + 10;
+    } catch {
+      drawTextLine('Nawaiam', { size: 18, bold: true, color: [0.05, 0.12, 0.25] });
+      y -= 2;
+    }
+  } else {
+    drawTextLine('Nawaiam - Reporte de Perfil y Resultados', { size: 16, bold: true, color: [0.05, 0.12, 0.25] });
     y -= 2;
   }
 
@@ -298,8 +378,13 @@ export async function GET() {
   });
   y -= 16;
 
-  drawTextLine('Reporte de Perfil y Resultados', { size: 16, bold: true, color: [0.05, 0.12, 0.25] });
+  if (!templateEmbeddedPage) {
+    drawTextLine('Reporte de Perfil y Resultados', { size: 16, bold: true, color: [0.05, 0.12, 0.25] });
+  }
   drawTextLine(`Generado: ${new Date().toLocaleString('es-AR')}`);
+  if (templateName) {
+    drawTextLine(`Plantilla visual: ${templateName}`, { size: 9, color: [0.33, 0.38, 0.45] });
+  }
   if (dbUnavailable) {
     drawTextLine('Origen de datos: modo contingencia (almacenamiento temporal)', { color: [0.58, 0.34, 0.03] });
   }
